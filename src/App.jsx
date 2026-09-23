@@ -8,8 +8,7 @@ import ScrollToTop from './components/ScrollToTop';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import QuestionBankPage from './pages/QuestionBankPage';
-import QuizPage from './pages/QuizPage';
-import GamePage from './pages/GamePage';
+import ProductsPage from './pages/ProductsPage';
 import PortfolioPage from './pages/PortfolioPage';
 import ContactPage from './pages/ContactPage';
 
@@ -46,9 +45,9 @@ export default function App() {
         <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
         <Route path="/profil" element={<PublicLayout><ProfilePage /></PublicLayout>} />
         <Route path="/bank-soal" element={<PublicLayout><QuestionBankPage /></PublicLayout>} />
-        <Route path="/kuis" element={<PublicLayout><QuizPage /></PublicLayout>} />
-        <Route path="/game" element={<PublicLayout><GamePage /></PublicLayout>} />
+        <Route path="/produk" element={<PublicLayout><ProductsPage /></PublicLayout>} />
         <Route path="/portofolio" element={<PublicLayout><PortfolioPage /></PublicLayout>} />
+        <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
         <Route path="/kontak" element={<PublicLayout><ContactPage /></PublicLayout>} />
 
         {/* Fallback */}

@@ -8,8 +8,6 @@ import {
 import {
   getStoredQuestions,
   saveStoredQuestions,
-  getStoredLeaderboard,
-  saveStoredLeaderboard,
   getStoredProfile,
   saveStoredProfile,
   getStoredTimeline,
@@ -17,30 +15,36 @@ import {
   getStoredPortfolio,
   saveStoredPortfolio,
   getStoredConsultations,
-  saveStoredConsultations
+  saveStoredConsultations,
+  getStoredBankSoalDownloads,
+  saveStoredBankSoalDownloads,
+  getStoredDigitalProducts,
+  saveStoredDigitalProducts,
+  getStoredPageSettings,
+  saveStoredPageSettings
 } from '../../data/ppknData';
 
 // Tabs
 import OverviewTab from '../../components/admin/OverviewTab';
-import QuestionManagerTab from '../../components/admin/QuestionManagerTab';
-import LeaderboardManagerTab from '../../components/admin/LeaderboardManagerTab';
+import PageSettingsTab from '../../components/admin/PageSettingsTab';
+import FreeQuestionMarketplaceTab from '../../components/admin/FreeQuestionMarketplaceTab';
+import DigitalProductsManagerTab from '../../components/admin/DigitalProductsManagerTab';
 import ProfileManagerTab from '../../components/admin/ProfileManagerTab';
 import PortfolioManagerTab from '../../components/admin/PortfolioManagerTab';
 import InquiriesManagerTab from '../../components/admin/InquiriesManagerTab';
 
 import { 
   LayoutDashboard, 
+  Settings, 
   BookOpen, 
-  Trophy, 
+  ShoppingBag, 
   User, 
   Award, 
   MessageSquare, 
   LogOut, 
   ExternalLink, 
   Menu, 
-  X, 
-  ShieldCheck,
-  Sparkles
+  X
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -49,12 +53,13 @@ export default function AdminDashboard() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Data States
-  const [questions, setQuestions] = useState(getStoredQuestions());
-  const [leaderboard, setLeaderboard] = useState(getStoredLeaderboard());
-  const [profile, setProfile] = useState(getStoredProfile());
-  const [timeline, setTimeline] = useState(getStoredTimeline());
-  const [portfolio, setPortfolio] = useState(getStoredPortfolio());
-  const [consultations, setConsultations] = useState(getStoredConsultations());
+  const [downloadItems, setDownloadItems] = useState(() => getStoredBankSoalDownloads());
+  const [digitalProducts, setDigitalProducts] = useState(() => getStoredDigitalProducts());
+  const [profile, setProfile] = useState(() => getStoredProfile());
+  const [timeline, setTimeline] = useState(() => getStoredTimeline());
+  const [portfolio, setPortfolio] = useState(() => getStoredPortfolio());
+  const [consultations, setConsultations] = useState(() => getStoredConsultations());
+  const [pageSettings, setPageSettings] = useState(() => getStoredPageSettings());
 
   // Protect Route
   useEffect(() => {
@@ -63,8 +68,6 @@ export default function AdminDashboard() {
     }
   }, [navigate]);
 
-  const session = getAdminSession();
-
   const handleLogout = () => {
     if (window.confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
       logoutAdmin();
@@ -72,15 +75,14 @@ export default function AdminDashboard() {
     }
   };
 
-  // State Update Handlers with persistence
-  const updateQuestions = (newQuestions) => {
-    setQuestions(newQuestions);
-    saveStoredQuestions(newQuestions);
+  const updateDownloadItems = (items) => {
+    setDownloadItems(items);
+    saveStoredBankSoalDownloads(items);
   };
 
-  const updateLeaderboard = (newLeaderboard) => {
-    setLeaderboard(newLeaderboard);
-    saveStoredLeaderboard(newLeaderboard);
+  const updateDigitalProducts = (products) => {
+    setDigitalProducts(products);
+    saveStoredDigitalProducts(products);
   };
 
   const updateProfile = (newProfile) => {
@@ -103,15 +105,21 @@ export default function AdminDashboard() {
     saveStoredConsultations(newConsultations);
   };
 
+  const updatePageSettings = (newSettings) => {
+    setPageSettings(newSettings);
+    saveStoredPageSettings(newSettings);
+  };
+
   const navItems = [
     { id: 'overview', label: 'Dashboard Utama', icon: LayoutDashboard },
-    { id: 'questions', label: 'Manajemen Bank Soal', icon: BookOpen, count: questions.length },
-    { id: 'leaderboard', label: 'Moderasi Leaderboard', icon: Trophy, count: leaderboard.length },
+    { id: 'page_settings', label: 'Pengaturan Halaman', icon: Settings },
+    { id: 'bank_soal_downloads', label: 'Katalog Bank Soal (Gratis)', icon: BookOpen, count: downloadItems.length },
+    { id: 'digital_products', label: 'Produk Digital Marketplace', icon: ShoppingBag, count: digitalProducts.length },
     { id: 'profile', label: 'Profil & Timeline Guru', icon: User },
     { id: 'portfolio', label: 'Portofolio & Proyek P5', icon: Award },
     { 
       id: 'inquiries', 
-      label: 'Kotak Masuk Siswa', 
+      label: 'Kotak Masuk (Contact)', 
       icon: MessageSquare, 
       count: consultations.filter(c => c.status === 'Belum Dibaca').length,
       badgeColor: 'bg-red-500 text-white'
@@ -141,11 +149,11 @@ export default function AdminDashboard() {
                   Panel Admin Ruang PPKn
                 </span>
                 <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-patriot-50 text-patriot-700 border border-patriot-200">
-                  CMS
+                  CMS Konten
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                Pengelolaan Konten Interaktif • Riska Puspita, S.Pd.
+                Pengaturan Konten & Marketplace • Riska Puspita, S.Pd.
               </p>
             </div>
           </div>
@@ -160,7 +168,7 @@ export default function AdminDashboard() {
             className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1.5"
           >
             <ExternalLink className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Lihat Web Publik</span>
+            <span className="hidden sm:inline">Lihat Website Publik</span>
           </Link>
 
           <div className="h-6 w-px bg-slate-200 hidden sm:block" />
@@ -187,7 +195,7 @@ export default function AdminDashboard() {
         {/* Left Sidebar (Desktop) */}
         <aside className="hidden lg:block w-64 bg-white rounded-3xl border border-slate-200 shadow-soft p-4 shrink-0 sticky top-24 space-y-1.5">
           <p className="px-3 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            Menu Kontrol CMS
+            Menu Kontrol Website
           </p>
 
           {navItems.map((item) => {
@@ -206,7 +214,7 @@ export default function AdminDashboard() {
               >
                 <div className="flex items-center gap-2.5">
                   <Icon className={`w-4 h-4 ${isActive ? 'text-gold-400' : 'text-slate-400'}`} />
-                  <span>{item.label}</span>
+                  <span className="truncate">{item.label}</span>
                 </div>
 
                 {item.count !== undefined && item.count > 0 && (
@@ -289,25 +297,31 @@ export default function AdminDashboard() {
         <main className="flex-1 min-w-0">
           {activeTab === 'overview' && (
             <OverviewTab
-              questions={questions}
-              leaderboard={leaderboard}
+              questions={downloadItems}
+              leaderboard={digitalProducts}
               consultations={consultations}
               portfolio={portfolio}
               onNavigateTab={(tabId) => setActiveTab(tabId)}
             />
           )}
 
-          {activeTab === 'questions' && (
-            <QuestionManagerTab
-              questions={questions}
-              onUpdateQuestions={updateQuestions}
+          {activeTab === 'page_settings' && (
+            <PageSettingsTab
+              onSettingsUpdated={updatePageSettings}
             />
           )}
 
-          {activeTab === 'leaderboard' && (
-            <LeaderboardManagerTab
-              leaderboard={leaderboard}
-              onUpdateLeaderboard={updateLeaderboard}
+          {activeTab === 'bank_soal_downloads' && (
+            <FreeQuestionMarketplaceTab
+              downloadItems={downloadItems}
+              onUpdateDownloadItems={updateDownloadItems}
+            />
+          )}
+
+          {activeTab === 'digital_products' && (
+            <DigitalProductsManagerTab
+              products={digitalProducts}
+              onUpdateProducts={updateDigitalProducts}
             />
           )}
 

@@ -556,3 +556,267 @@ export function saveStoredLeaderboard(board) {
   }
 }
 
+// ==============================================================================
+// KATALOG BANK SOAL SIAP UNDUH GRATIS (MARKETPLACE STYLE)
+// ==============================================================================
+
+export const defaultBankSoalDownloads = [
+  {
+    id: "dl-1",
+    title: "Paket Asesmen Sumatif Akhir Semester (SAS) PPKn Kelas 7 Kurikulum Merdeka",
+    grade: "Kelas 7",
+    semester: "Semester 1 & 2",
+    format: "Word (.DOCX) + PDF",
+    fileSize: "2.4 MB",
+    downloadCount: 1420,
+    rating: 4.9,
+    reviews: 128,
+    isFree: true,
+    description: "Kumpulan soal Sumatif Akhir Semester (SAS) Kurikulum Merdeka Fase D lengkap dengan kisi-kisi penulisan soal, kartu soal, kunci jawaban objektif, dan pedoman penskoran rubrik esai.",
+    topics: ["Sejarah Perumusan Pancasila", "Norma dan UUD NRI 1945", "Kesatuan Indonesia & Karakteristik Daerah"],
+    curriculum: "Kurikulum Merdeka",
+    downloadUrl: "#download"
+  },
+  {
+    id: "dl-2",
+    title: "Bank Soal Pilihan Ganda & Uraian Analisis Kasus PPKn Kelas 8 (Format Word Siap Edit)",
+    grade: "Kelas 8",
+    semester: "Semester Ganjil & Genap",
+    format: "Word (.DOCX)",
+    fileSize: "1.8 MB",
+    downloadCount: 980,
+    rating: 4.8,
+    reviews: 94,
+    isFree: true,
+    description: "Koleksi butir soal bertingkat nalar tinggi (HOTS) berbasis studi kasus pelanggaran konstitusi dan dinamika norma hukum di Indonesia untuk ulangan harian dan PTS.",
+    topics: ["Kedudukan & Fungsi Pancasila", "Bentuk & Kedaulatan Negara", "Tata Urutan Peraturan Perundang-Undangan"],
+    curriculum: "Kurikulum Merdeka",
+    downloadUrl: "#download"
+  },
+  {
+    id: "dl-3",
+    title: "Paket Latihan Ujian Sekolah & Asesmen Standarisasi Pendidikan Kelas 9 SMP",
+    grade: "Kelas 9",
+    semester: "Ujian Kelulusan",
+    format: "Word (.DOCX) + PDF Kunci",
+    fileSize: "3.1 MB",
+    downloadCount: 2150,
+    rating: 5.0,
+    reviews: 210,
+    isFree: true,
+    description: "5 paket simulasi soal Ujian Akhir Sekolah PPKn SMP lengkap dengan lembar jawaban komputer (LJK) dan pembahasan detail butir per butir dari materi Kelas 7 sampai 9.",
+    topics: ["Dinamika Penerapan Pancasila", "Pokok Pikiran Pembukaan UUD 1945", "Bhinneka Tunggal Ika & Bela Negara"],
+    curriculum: "Fase D Lengkap",
+    downloadUrl: "#download"
+  },
+  {
+    id: "dl-4",
+    title: "Kumpulan Lembar Kerja Peserta Didik (LKPD) & Soal Formatif Reflektif Fase D",
+    grade: "Kelas 7, 8, 9",
+    semester: "Semua Semester",
+    format: "Word (.DOCX)",
+    fileSize: "4.2 MB",
+    downloadCount: 1680,
+    rating: 4.9,
+    reviews: 142,
+    isFree: true,
+    description: "Perangkat lembar kerja siswa untuk menguji pemahaman harian dengan model refleksi nilai karakter Pelajar Pancasila, tugas kelompok, dan diskusi studi kasus moral.",
+    topics: ["Hak & Kewajiban Warga Negara", "Gotong Royong & Kerja Sama", "Literasi Konstitusi Digital"],
+    curriculum: "Kurikulum Merdeka",
+    downloadUrl: "#download"
+  },
+  {
+    id: "dl-5",
+    title: "Mega Bundle Soal Ulangan Harian (UH) 1 Tahun Penuh Seluruh Bab PPKn SMP",
+    grade: "Kelas 7, 8, 9",
+    semester: "Semester 1 & 2",
+    format: "ZIP Archive (.DOCX)",
+    fileSize: "8.5 MB",
+    downloadCount: 3200,
+    rating: 5.0,
+    reviews: 350,
+    isFree: true,
+    description: "Arsip lengkap soal ulangan harian per bab Kurikulum Merdeka dari Bab 1 hingga Bab 6 untuk guru PPKn yang membutuhkan bank soal siap pakai dan mudah dimodifikasi.",
+    topics: ["Pancasila", "UUD NRI 1945", "Bhinneka Tunggal Ika", "NKRI"],
+    curriculum: "Kurikulum Merdeka",
+    downloadUrl: "#download"
+  }
+];
+
+export function getStoredBankSoalDownloads() {
+  if (typeof window === 'undefined') return defaultBankSoalDownloads;
+  const raw = localStorage.getItem('admin_bank_soal_downloads');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return defaultBankSoalDownloads;
+}
+
+export function saveStoredBankSoalDownloads(items) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_bank_soal_downloads', JSON.stringify(items));
+  }
+}
+
+// ==============================================================================
+// KATALOG PRODUK DIGITAL MARKETPLACE
+// ==============================================================================
+
+export const defaultDigitalProducts = [
+  {
+    id: "prod-1",
+    title: "Paket Lengkap Modul Ajar PPKn Fase D 1 Tahun Penuh (Kelas 7, 8, 9)",
+    category: "Modul Ajar",
+    price: 49000,
+    originalPrice: 99000,
+    rating: 5.0,
+    salesCount: 480,
+    badge: "Best Seller",
+    thumbnailText: "MODUL AJAR 1 TAHUN",
+    color: "from-blue-600 to-indigo-700",
+    description: "Dokumen administrasi guru PPKn Kurikulum Merdeka terlengkap mencakup Alur Tujuan Pembelajaran (ATP), Modul Ajar siap cetak/edit, LKPD siswa, bahan ajar, dan instrumen asesmen diagnostik, formatif, serta sumatif.",
+    features: [
+      "File Microsoft Word (.docx) 100% bisa diedit",
+      "Sesuai Capaian Pembelajaran (CP) terbaru",
+      "Bonus Alur Tujuan Pembelajaran (ATP) & Program Semester",
+      "Dilengkapi Rubrik Penilaian & Lembar Observasi Karakter"
+    ]
+  },
+  {
+    id: "prod-2",
+    title: "E-Book: Desain Pembelajaran PPKn Interaktif & Anti-Membosankan",
+    category: "E-Book Guru",
+    price: 35000,
+    originalPrice: 65000,
+    rating: 4.9,
+    salesCount: 310,
+    badge: "Rekomendasi",
+    thumbnailText: "E-BOOK METODE MENGAJAR",
+    color: "from-amber-500 to-gold-600",
+    description: "Buku panduan praktis karya Riska Puspita, S.Pd. berisi 25 metode pembelajaran kreatif untuk mengubah persepsi belajar PPKn dari hafalan pasif menjadi eksplorasi kritis, studi kasus kelas, dan simulasi seru.",
+    features: [
+      "Format PDF Berkualitas Tinggi (140 Halaman)",
+      "Langkah-langkah praktis simulasi sidang & pemilu kelas",
+      "Teknik penilaian otentik tanpa pusing merekap",
+      "Studi kasus nyata dinamika remaja SMP"
+    ]
+  },
+  {
+    id: "prod-3",
+    title: "Bundle 35 Template Slide Canva & PPT Materi PPKn SMP Siap Mengajar",
+    category: "Media Presentasi",
+    price: 39000,
+    originalPrice: 75000,
+    rating: 4.9,
+    salesCount: 420,
+    badge: "Eksklusif Guru",
+    thumbnailText: "35 SLIDE CANVA & PPT",
+    color: "from-patriot-600 to-red-700",
+    description: "Kumpulan template presentasi estetik, rapi, dan kaya visual bertema nasionalis modern untuk mengajar di kelas maupun presentasi supervisi kepala sekolah.",
+    features: [
+      "Link Template Canva Siap Duplikat & File .PPTX",
+      "Animasi transisi halus dan ilustrasi profesional",
+      "Mencakup seluruh bab Kelas 7, 8, dan 9",
+      "Bisa diedit di HP, laptop, atau tablet"
+    ]
+  },
+  {
+    id: "prod-4",
+    title: "Master Kit Modul Proyek P5 SMP (Bhinneka, Suara Demokrasi, Kearifan Lokal)",
+    category: "Proyek P5",
+    price: 29000,
+    originalPrice: 59000,
+    rating: 4.8,
+    salesCount: 260,
+    badge: "Praktis",
+    thumbnailText: "MASTER KIT P5",
+    color: "from-emerald-600 to-teal-700",
+    description: "Panduan fasilitator proyek Penguatan Profil Pelajar Pancasila siap pakai, dilengkapi modul proyek rinci, jadwal aktivitas mingguan, lembar kerja siswa, dan rubrik penilaian rapor P5.",
+    features: [
+      "3 Tema P5 Lengkap untuk SMP",
+      "Format Rapor & Rubrik Asesmen Siap Pakai",
+      "Panduan Gelar Karya Siswa & Pameran Budaya",
+      "File DOCX dan PDF"
+    ]
+  }
+];
+
+export function getStoredDigitalProducts() {
+  if (typeof window === 'undefined') return defaultDigitalProducts;
+  const raw = localStorage.getItem('admin_digital_products');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return defaultDigitalProducts;
+}
+
+export function saveStoredDigitalProducts(items) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_digital_products', JSON.stringify(items));
+  }
+}
+
+// ==============================================================================
+// PENGATURAN HALAMAN WEBSITE (PAGE SETTINGS)
+// ==============================================================================
+
+export const defaultPageSettings = {
+  general: {
+    siteName: "Ruang PPKn Interaktif",
+    teacherName: "Riska Puspita, S.Pd.",
+    teacherRole: "Pendidik Pendidikan Pancasila SMP",
+    schoolLocation: "Jawa Barat, Indonesia"
+  },
+  contact: {
+    title: "Hubungi & Konsultasi Bersama Bu Riska",
+    subtitle: "Punya pertanyaan seputar materi PPKn, modul kurikulum merdeka, atau kerja sama pelatihan guru? Silakan hubungi melalui saluran komunikasi resmi berikut.",
+    whatsappNumber: "6281234567890",
+    whatsappDisplay: "+62 812-3456-7890",
+    whatsappNote: "Respon cepat pada hari kerja (Senin - Jumat: 08.00 - 16.00 WIB)",
+    email: "riska.puspita.ppkn@gmail.com",
+    instagramUrl: "https://instagram.com",
+    youtubeUrl: "https://youtube.com",
+    tiktokUrl: "https://tiktok.com",
+    location: "SMP Negeri Indonesia, Jawa Barat"
+  },
+  bankSoal: {
+    heroTitle: "Katalog Bank Soal PPKn SMP (100% Gratis)",
+    heroSubtitle: "Perangkat evaluasi dan paket soal sumatif, formatif, serta latihan ujian sekolah yang dapat diunduh bebas oleh seluruh guru PPKn se-Indonesia untuk kemajuan pendidikan anak bangsa."
+  },
+  products: {
+    heroTitle: "Marketplace Produk Digital Guru PPKn",
+    heroSubtitle: "Koleksi modul ajar 1 tahun lengkap, slide presentasi Canva siap pakai, dan e-book inovasi pembelajaran karya Riska Puspita, S.Pd. untuk mempermudah administrasi mengajar Anda."
+  }
+};
+
+export function getStoredPageSettings() {
+  if (typeof window === 'undefined') return defaultPageSettings;
+  const raw = localStorage.getItem('admin_page_settings');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      return { ...defaultPageSettings, ...parsed };
+    } catch {
+      // fallback
+    }
+  }
+  return defaultPageSettings;
+}
+
+export function saveStoredPageSettings(settings) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_page_settings', JSON.stringify(settings));
+  }
+}
+
+

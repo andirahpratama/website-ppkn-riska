@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Sparkles, Shield, ArrowUp } from 'lucide-react';
-import { teacherProfile } from '../data/ppknData';
+import { Heart, Sparkles, Shield, ArrowUp, Mail, MessageCircle, MapPin } from 'lucide-react';
+import { getStoredPageSettings } from '../data/ppknData';
 
 export default function Footer() {
+  const pageSettings = getStoredPageSettings();
+  const contact = pageSettings.contact || {};
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -15,23 +18,23 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           
           {/* Brand Info */}
-          <div className="md:col-span-6 space-y-4">
+          <div className="md:col-span-5 space-y-4">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-slate-900 font-black text-lg shadow-soft">
                 RP
               </div>
               <div>
                 <h4 className="font-extrabold text-lg text-white group-hover:text-gold-400 transition-colors">
-                  Ruang PPKn Interaktif
+                  {pageSettings.general?.siteName || 'Ruang PPKn Interaktif'}
                 </h4>
                 <p className="text-xs text-gold-300 font-medium">
-                  {teacherProfile.name} • Pendidik PPKn SMP
+                  {pageSettings.general?.teacherName || 'Riska Puspita, S.Pd.'} • Pendidik PPKn SMP
                 </p>
               </div>
             </Link>
 
             <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed">
-              Portal edukasi kewarganegaraan digital yang dirancang untuk membimbing siswa SMP Indonesia menjadi insan yang cerdas berkonstitusi, bertoleransi tinggi, dan berjiwa Pancasila sejati.
+              Portal edukasi kewarganegaraan dan media berbagi perangkat pembelajaran gratis bagi guru PPKn se-Indonesia untuk menciptakan generasi penerus bangsa yang berkarakter Pancasila.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs text-slate-300">
@@ -41,45 +44,62 @@ export default function Footer() {
           </div>
 
           {/* Quick Page Links */}
-          <div className="md:col-span-3 space-y-3">
+          <div className="md:col-span-4 space-y-3">
             <h5 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              Halaman Pembelajaran
+              Halaman Website
             </h5>
             <ul className="space-y-2 text-xs text-slate-400 font-medium">
-              <li><Link to="/profil" className="hover:text-gold-400 transition-colors">Profil & Jejak Dedikasi Guru</Link></li>
-              <li><Link to="/bank-soal" className="hover:text-gold-400 transition-colors">Bank Soal Kelas 7, 8, 9</Link></li>
-              <li><Link to="/kuis" className="hover:text-gold-400 transition-colors">Arena Kuis Kilat 20 Detik</Link></li>
-              <li><Link to="/game" className="hover:text-gold-400 transition-colors">Gamifikasi Nilai Pancasila</Link></li>
+              <li><Link to="/profil" className="hover:text-gold-400 transition-colors">Profil & Dedikasi Guru</Link></li>
+              <li><Link to="/bank-soal" className="hover:text-gold-400 transition-colors">Bank Soal PPKn (Download Gratis)</Link></li>
+              <li><Link to="/produk" className="hover:text-gold-400 transition-colors">Marketplace Produk Digital Guru</Link></li>
               <li><Link to="/portofolio" className="hover:text-gold-400 transition-colors">Galeri Proyek P5 Nusantara</Link></li>
-              <li><Link to="/kontak" className="hover:text-gold-400 transition-colors">Konsultasi Sapa Bu Riska</Link></li>
-              <li className="pt-1"><Link to="/admin/login" className="hover:text-gold-400 transition-colors text-slate-500 text-[11px] font-semibold">🔐 Panel Masuk Guru (Admin)</Link></li>
+              <li><Link to="/contact" className="hover:text-gold-400 transition-colors">Contact / Hubungi Bu Riska</Link></li>
+              <li className="pt-2">
+                <Link to="/admin/login" className="hover:text-gold-400 transition-colors text-slate-500 text-[11px] font-semibold">
+                  🔐 Panel Masuk Guru (Admin)
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Scroll to Top & Motto */}
+          {/* Contact Highlights & Scroll to Top */}
           <div className="md:col-span-3 space-y-3">
             <h5 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              Kembali ke Atas
+              Kontak Cepat
             </h5>
-            <button
-              onClick={scrollToTop}
-              className="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-gold-400 border border-slate-700 text-xs font-bold flex items-center gap-2 transition-all"
-            >
-              <ArrowUp className="w-4 h-4" />
-              <span>Gulir ke Puncak Layar</span>
-            </button>
-            <p className="text-[11px] text-slate-500 italic pt-1">
-              "Pendidikan adalah senjata paling ampuh untuk mengubah dunia." — Nelson Mandela
-            </p>
+            <div className="space-y-2 text-xs text-slate-400">
+              <p className="flex items-center gap-2">
+                <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>WA: {contact.whatsappDisplay || '+62 812-3456-7890'}</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="w-3.5 h-3.5 text-gold-400 shrink-0" />
+                <span className="truncate">{contact.email || 'riska.puspita.ppkn@gmail.com'}</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-patriot-400 shrink-0" />
+                <span>{contact.location || 'SMP Negeri, Jawa Barat'}</span>
+              </p>
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={scrollToTop}
+                className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-gold-400 border border-slate-700 text-xs font-bold flex items-center gap-2 transition-all"
+              >
+                <ArrowUp className="w-3.5 h-3.5" />
+                <span>Kembali ke Atas</span>
+              </button>
+            </div>
           </div>
 
         </div>
 
         {/* Bottom Copyright */}
         <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          <p>© {new Date().getFullYear()} Ruang PPKn Interaktif – Riska Puspita, S.Pd. Seluruh Hak Cipta Dilindungi.</p>
+          <p>© {new Date().getFullYear()} {pageSettings.general?.siteName || 'Ruang PPKn Interaktif'} – {pageSettings.general?.teacherName || 'Riska Puspita, S.Pd.'}. All Rights Reserved.</p>
           <div className="flex items-center gap-1.5 text-slate-400">
-            <span>Dibuat dengan semangat nasionalisme untuk pelajar Indonesia</span>
+            <span>Didedikasikan untuk kemajuan pendidikan kewarganegaraan Indonesia</span>
             <Heart className="w-3.5 h-3.5 text-patriot-500 fill-patriot-500" />
           </div>
         </div>

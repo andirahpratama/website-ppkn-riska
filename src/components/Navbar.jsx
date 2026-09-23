@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { 
-  Menu, 
-  X,
-  ChevronRight
-} from 'lucide-react';
+import { Menu, X, ChevronRight } from 'lucide-react';
+import { getStoredPageSettings } from '../data/ppknData';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const pageSettings = getStoredPageSettings();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,11 +25,10 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Beranda', path: '/' },
     { name: 'Profil Guru', path: '/profil' },
-    { name: 'Bank Soal', path: '/bank-soal' },
-    { name: 'Arena Kuis', path: '/kuis' },
-    { name: 'Zona Game', path: '/game' },
+    { name: 'Bank Soal (Gratis)', path: '/bank-soal' },
+    { name: 'Produk Digital', path: '/produk' },
     { name: 'Portofolio P5', path: '/portofolio' },
-    { name: 'Sapa Bu Riska', path: '/kontak' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -45,22 +42,22 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Title (Clean Typography) */}
+          {/* Brand Title */}
           <Link to="/" className="flex flex-col group">
             <div className="flex items-center gap-2">
               <span className="font-bold text-slate-900 text-base sm:text-lg leading-tight group-hover:text-patriot-600 transition-colors">
-                Ruang PPKn Interaktif
+                {pageSettings.general?.siteName || 'Ruang PPKn Interaktif'}
               </span>
               <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-patriot-50 text-patriot-700 border border-patriot-200">
                 SMP
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium">
-              Riska Puspita, S.Pd. • Guru Pendidikan Pancasila
+              {pageSettings.general?.teacherName || 'Riska Puspita, S.Pd.'} • Guru Pendidikan Pancasila
             </p>
           </Link>
 
-          {/* Desktop Nav - Clean Text (Tanpa Logo/Ikon & Tanpa Tulisan Supabase Live) */}
+          {/* Desktop Nav - Clean Text */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
             {navLinks.map((link) => (
               <NavLink
@@ -80,7 +77,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Mobile Hamburger Toggle Only (Supabase Live Dihilangkan) */}
+          {/* Mobile Hamburger Toggle */}
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -117,7 +114,7 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* Mobile Bottom Navigation Bar */}
+      {/* Mobile Bottom Navigation Bar (Thumb-Friendly) */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1 flex items-center justify-around shadow-soft-lg">
         <NavLink 
           to="/bank-soal" 
@@ -130,24 +127,14 @@ export default function Navbar() {
           Bank Soal
         </NavLink>
         <NavLink 
-          to="/kuis" 
+          to="/produk" 
           className={({ isActive }) => 
             `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[11px] font-semibold ${
               isActive ? 'text-gold-600 font-bold' : 'text-slate-600 hover:text-gold-600'
             }`
           }
         >
-          Kuis Kilat
-        </NavLink>
-        <NavLink 
-          to="/game" 
-          className={({ isActive }) => 
-            `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[11px] font-semibold ${
-              isActive ? 'text-patriot-700 font-bold' : 'text-slate-600 hover:text-patriot-600'
-            }`
-          }
-        >
-          Zona Game
+          Produk Digital
         </NavLink>
         <NavLink 
           to="/portofolio" 
@@ -160,14 +147,14 @@ export default function Navbar() {
           Proyek P5
         </NavLink>
         <NavLink 
-          to="/kontak" 
+          to="/contact" 
           className={({ isActive }) => 
             `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[11px] font-semibold ${
               isActive ? 'text-patriot-700 font-bold' : 'text-slate-600 hover:text-patriot-600'
             }`
           }
         >
-          Sapa Guru
+          Contact
         </NavLink>
       </nav>
     </>

@@ -94,7 +94,7 @@ export default function HeroSection() {
 
             {/* Authentic Teacher's Introduction */}
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Selamat datang di portal belajar interaktif bersama <strong>{teacherProfile.name}</strong>. Di sini, kita belajar hukum, konstitusi, dan hak-kewajiban warga negara melalui studi kasus nyata, arena kuis berwaktu, dan tantangan gamifikasi yang memacu nalar kritis!
+              Selamat datang di portal edukasi digital resmi bersama <strong>{teacherProfile.name}</strong>. Temukan paket bank soal evaluasi Kurikulum Merdeka yang dapat diunduh 100% gratis, produk digital modul ajar lengkap, serta ruang konsultasi untuk kemajuan pendidikan anak bangsa.
             </p>
 
             {/* Action Buttons */}
@@ -104,16 +104,16 @@ export default function HeroSection() {
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-patriot-600 to-patriot-700 text-white font-bold text-base shadow-soft hover:shadow-glow-patriot hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5"
               >
                 <BookOpenCheck className="w-5 h-5" />
-                <span>Buka Bank Soal SMP</span>
+                <span>Unduh Bank Soal (Gratis)</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
               <Link
-                to="/kuis"
+                to="/produk"
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gold-400 hover:bg-gold-500 text-slate-900 font-bold text-base shadow-soft hover:shadow-glow-gold hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5"
               >
-                <Flame className="w-5 h-5 text-patriot-700" />
-                <span>Mulai Kuis Kilat 20 Detik</span>
+                <Sparkles className="w-5 h-5 text-slate-950" />
+                <span>Marketplace Produk Digital</span>
               </Link>
             </div>
 
