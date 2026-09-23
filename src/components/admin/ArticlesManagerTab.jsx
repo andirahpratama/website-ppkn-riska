@@ -467,11 +467,11 @@ export default function ArticlesManagerTab() {
 
       {/* MODAL EDITOR ARTIKEL & SEO CMS */}
       {isEditorModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-4xl w-full shadow-soft-lg space-y-6 border border-slate-200 my-8">
+        <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-soft-lg border border-slate-200 overflow-hidden">
             
-            {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            {/* Modal Header (Sticky Top) */}
+            <div className="px-6 sm:px-8 py-5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
               <div>
                 <h3 className="text-lg font-black text-slate-900">
                   {editingArticleId ? 'Sunting Artikel & Pengaturan SEO' : 'Tulis Artikel Edukasi PPKn Baru'}
@@ -482,15 +482,18 @@ export default function ArticlesManagerTab() {
               </div>
               <button
                 onClick={() => setIsEditorModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveArticle} className="space-y-6">
+            <form onSubmit={handleSaveArticle} className="flex flex-col flex-1 min-h-0 overflow-hidden">
               
-              {/* TOMBOL PINTAS: UPLOAD FILE .MD */}
+              {/* Scrollable Modal Body */}
+              <div className="p-6 sm:p-8 overflow-y-auto flex-1 space-y-6">
+                
+                {/* TOMBOL PINTAS: UPLOAD FILE .MD */}
               <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gold-400 text-slate-900 flex items-center justify-center shrink-0">
@@ -844,12 +847,15 @@ export default function ArticlesManagerTab() {
                 )}
               </div>
 
-              {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+              </div>
+              {/* Akhir Scrollable Modal Body */}
+
+              {/* Modal Footer (Sticky Bottom) */}
+              <div className="px-6 sm:px-8 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsEditorModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 transition-colors"
                 >
                   Batal
                 </button>

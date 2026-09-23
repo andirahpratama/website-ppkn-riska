@@ -414,9 +414,11 @@ export default function ProfileManagerTab({
 
       {/* Modal Tambah / Edit Milestone Lengkap dengan Foto */}
       {isMilestoneModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-soft-lg space-y-4 border border-slate-200 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-soft-lg border border-slate-200 overflow-hidden">
+            
+            {/* Modal Header (Sticky Top) */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
               <div>
                 <h3 className="text-base font-black text-slate-900">
                   {editingMilestoneIndex !== null ? 'Sunting Tonggak Sejarah' : 'Tambah Tonggak Sejarah Baru'}
@@ -427,13 +429,16 @@ export default function ProfileManagerTab({
               </div>
               <button
                 onClick={() => setIsMilestoneModalOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveMilestoneSubmit} className="space-y-4">
+            <form onSubmit={handleSaveMilestoneSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              
+              {/* Scrollable Body */}
+              <div className="p-6 overflow-y-auto flex-1 space-y-4">
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -550,11 +555,15 @@ export default function ProfileManagerTab({
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+              </div>
+              {/* Akhir Scrollable Body */}
+
+              {/* Sticky Footer */}
+              <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsMilestoneModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 transition-colors"
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 transition-colors"
                 >
                   Batal
                 </button>
