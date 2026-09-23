@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import SupabaseModal from './components/SupabaseModal';
 import ScrollToTop from './components/ScrollToTop';
 
-// Multi-Page Views
+// Public Pages
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import QuestionBankPage from './pages/QuestionBankPage';
@@ -14,42 +13,47 @@ import GamePage from './pages/GamePage';
 import PortfolioPage from './pages/PortfolioPage';
 import ContactPage from './pages/ContactPage';
 
-export default function App() {
-  const [isDbModalOpen, setIsDbModalOpen] = useState(false);
+// Admin CMS Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
+// Layout Khusus Halaman Publik (dengan Navbar & Footer resmi)
+function PublicLayout({ children }) {
+  return (
+    <div className="min-h-screen bg-surface-ground text-surface-dark flex flex-col font-sans selection:bg-gold-400 selection:text-slate-900">
+      <Navbar />
+      <main className="flex-1">
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default function App() {
   return (
     <BrowserRouter>
-      {/* Reset Scroll ke paling atas saat pindah halaman */}
+      {/* Reset Scroll ke puncak layar saat rute berubah */}
       <ScrollToTop />
 
-      <div className="min-h-screen bg-surface-ground text-surface-dark flex flex-col font-sans selection:bg-gold-400 selection:text-slate-900">
-        {/* Sticky Header Navigasi */}
-        <Navbar />
+      <Routes>
+        {/* Rute Admin CMS (Bebas dari Navbar publik) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/*" element={<AdminDashboard />} />
 
-        {/* Halaman Konten Berdasarkan URL Rute */}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/profil" element={<ProfilePage />} />
-            <Route path="/bank-soal" element={<QuestionBankPage />} />
-            <Route path="/kuis" element={<QuizPage />} />
-            <Route path="/game" element={<GamePage />} />
-            <Route path="/portofolio" element={<PortfolioPage />} />
-            <Route path="/kontak" element={<ContactPage />} />
-            {/* Fallback ke Beranda jika rute tidak ditemukan */}
-            <Route path="*" element={<HomePage />} />
-          </Routes>
-        </main>
+        {/* Rute Website Publik */}
+        <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
+        <Route path="/profil" element={<PublicLayout><ProfilePage /></PublicLayout>} />
+        <Route path="/bank-soal" element={<PublicLayout><QuestionBankPage /></PublicLayout>} />
+        <Route path="/kuis" element={<PublicLayout><QuizPage /></PublicLayout>} />
+        <Route path="/game" element={<PublicLayout><GamePage /></PublicLayout>} />
+        <Route path="/portofolio" element={<PublicLayout><PortfolioPage /></PublicLayout>} />
+        <Route path="/kontak" element={<PublicLayout><ContactPage /></PublicLayout>} />
 
-        {/* Footer */}
-        <Footer />
-
-        {/* Modal Konfigurasi Supabase */}
-        <SupabaseModal 
-          isOpen={isDbModalOpen} 
-          onClose={() => setIsDbModalOpen(false)} 
-        />
-      </div>
+        {/* Fallback */}
+        <Route path="*" element={<PublicLayout><HomePage /></PublicLayout>} />
+      </Routes>
     </BrowserRouter>
   );
 }

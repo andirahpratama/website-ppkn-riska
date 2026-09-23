@@ -52,6 +52,7 @@ export default function Footer() {
               <li><Link to="/game" className="hover:text-gold-400 transition-colors">Gamifikasi Nilai Pancasila</Link></li>
               <li><Link to="/portofolio" className="hover:text-gold-400 transition-colors">Galeri Proyek P5 Nusantara</Link></li>
               <li><Link to="/kontak" className="hover:text-gold-400 transition-colors">Konsultasi Sapa Bu Riska</Link></li>
+              <li className="pt-1"><Link to="/admin/login" className="hover:text-gold-400 transition-colors text-slate-500 text-[11px] font-semibold">🔐 Panel Masuk Guru (Admin)</Link></li>
             </ul>
           </div>
 

@@ -12,9 +12,10 @@ import {
   Sparkles,
   RotateCcw
 } from 'lucide-react';
-import { questionBank } from '../data/ppknData';
+import { questionBank, getStoredQuestions } from '../data/ppknData';
 
 export default function QuestionBank() {
+  const [questionsList] = useState(() => getStoredQuestions());
   const [selectedGrade, setSelectedGrade] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +28,7 @@ export default function QuestionBank() {
   const topics = ['all', 'Pancasila', 'UUD NRI 1945', 'Norma & UUD 1945', 'Bhinneka Tunggal Ika', 'NKRI'];
 
   const filteredQuestions = useMemo(() => {
-    return questionBank.filter((item) => {
+    return questionsList.filter((item) => {
       const matchGrade = selectedGrade === 'all' || item.grade === selectedGrade;
       const matchTopic = selectedTopic === 'all' || item.topic === selectedTopic;
       const matchSearch = searchQuery.trim() === '' || 
@@ -35,7 +36,7 @@ export default function QuestionBank() {
         item.topic.toLowerCase().includes(searchQuery.toLowerCase());
       return matchGrade && matchTopic && matchSearch;
     });
-  }, [selectedGrade, selectedTopic, searchQuery]);
+  }, [questionsList, selectedGrade, selectedTopic, searchQuery]);
 
   const handleSelectOption = (questionId, optionIndex) => {
     setStudentAnswers((prev) => ({

@@ -414,3 +414,145 @@ export const portfolioData = {
     "Bimtek Guru PPKn Penggerak Penguatan Karakter Profil Pelajar Pancasila"
   ]
 };
+
+// ==============================================================================
+// HELPER STORAGE PERSISTENCE UNTUK ADMIN CMS
+// ==============================================================================
+
+export function getStoredQuestions() {
+  if (typeof window === 'undefined') return questionBank;
+  const raw = localStorage.getItem('admin_custom_questions');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return questionBank;
+}
+
+export function saveStoredQuestions(questions) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_custom_questions', JSON.stringify(questions));
+  }
+}
+
+export function getStoredProfile() {
+  if (typeof window === 'undefined') return teacherProfile;
+  const raw = localStorage.getItem('admin_custom_profile');
+  if (raw) {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      // fallback
+    }
+  }
+  return teacherProfile;
+}
+
+export function saveStoredProfile(profile) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_custom_profile', JSON.stringify(profile));
+  }
+}
+
+export function getStoredTimeline() {
+  if (typeof window === 'undefined') return teacherTimeline;
+  const raw = localStorage.getItem('admin_custom_timeline');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return teacherTimeline;
+}
+
+export function saveStoredTimeline(timeline) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_custom_timeline', JSON.stringify(timeline));
+  }
+}
+
+export function getStoredPortfolio() {
+  if (typeof window === 'undefined') return portfolioData;
+  const raw = localStorage.getItem('admin_custom_portfolio');
+  if (raw) {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      // fallback
+    }
+  }
+  return portfolioData;
+}
+
+export function saveStoredPortfolio(portfolio) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_custom_portfolio', JSON.stringify(portfolio));
+  }
+}
+
+export function getStoredConsultations() {
+  if (typeof window === 'undefined') return [];
+  const raw = localStorage.getItem('local_consultations');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return [
+    {
+      id: "inq-1",
+      student_name: "Rizky Ramadhan",
+      grade: "Kelas 8",
+      contact: "08123456789",
+      message: "Bu Riska, untuk tugas proyek P5 tema suara demokrasi, apakah kami boleh membuat video simulasi debat pemilihan ketua OSIS?",
+      status: "Belum Dibaca",
+      created_at: new Date(Date.now() - 3600000 * 2).toISOString()
+    },
+    {
+      id: "inq-2",
+      student_name: "Alya Zahra",
+      grade: "Kelas 7",
+      contact: "alya.zahra@smp.sch.id",
+      message: "Permisi Bu, perbedaan mendasar antara norma hukum dan norma kesopanan saat ulangan harian apa ya bu? Masih agak bingung.",
+      status: "Dalam Proses",
+      created_at: new Date(Date.now() - 3600000 * 24).toISOString()
+    }
+  ];
+}
+
+export function saveStoredConsultations(consultations) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('local_consultations', JSON.stringify(consultations));
+  }
+}
+
+export function getStoredLeaderboard() {
+  if (typeof window === 'undefined') return defaultLeaderboard;
+  const raw = localStorage.getItem('local_leaderboard');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return defaultLeaderboard;
+}
+
+export function saveStoredLeaderboard(board) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('local_leaderboard', JSON.stringify(board));
+  }
+}
+
