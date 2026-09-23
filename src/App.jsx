@@ -24,7 +24,7 @@ export default function App() {
 
       <div className="min-h-screen bg-surface-ground text-surface-dark flex flex-col font-sans selection:bg-gold-400 selection:text-slate-900">
         {/* Sticky Header Navigasi */}
-        <Navbar onOpenDatabaseModal={() => setIsDbModalOpen(true)} />
+        <Navbar />
 
         {/* Halaman Konten Berdasarkan URL Rute */}
         <main className="flex-1">
