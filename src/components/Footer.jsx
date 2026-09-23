@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, Sparkles, Shield, ArrowUp } from 'lucide-react';
 import { teacherProfile } from '../data/ppknData';
 
@@ -15,19 +16,19 @@ export default function Footer() {
           
           {/* Brand Info */}
           <div className="md:col-span-6 space-y-4">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-slate-900 font-black text-lg shadow-soft">
                 RP
               </div>
               <div>
-                <h4 className="font-extrabold text-lg text-white">
+                <h4 className="font-extrabold text-lg text-white group-hover:text-gold-400 transition-colors">
                   Ruang PPKn Interaktif
                 </h4>
                 <p className="text-xs text-gold-300 font-medium">
                   {teacherProfile.name} • Pendidik PPKn SMP
                 </p>
               </div>
-            </div>
+            </Link>
 
             <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed">
               Portal edukasi kewarganegaraan digital yang dirancang untuk membimbing siswa SMP Indonesia menjadi insan yang cerdas berkonstitusi, bertoleransi tinggi, dan berjiwa Pancasila sejati.
@@ -39,17 +40,18 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Page Links */}
           <div className="md:col-span-3 space-y-3">
             <h5 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              Jelajah Materi
+              Halaman Pembelajaran
             </h5>
             <ul className="space-y-2 text-xs text-slate-400 font-medium">
-              <li><a href="#bank-soal" className="hover:text-gold-400 transition-colors">Bank Soal Kelas 7, 8, 9</a></li>
-              <li><a href="#kuis" className="hover:text-gold-400 transition-colors">Arena Kuis Kilat 20 Detik</a></li>
-              <li><a href="#game" className="hover:text-gold-400 transition-colors">Gamifikasi Nilai Pancasila</a></li>
-              <li><a href="#portofolio" className="hover:text-gold-400 transition-colors">Galeri Proyek P5 Nusantara</a></li>
-              <li><a href="#kontak" className="hover:text-gold-400 transition-colors">Konsultasi Sapa Bu Riska</a></li>
+              <li><Link to="/profil" className="hover:text-gold-400 transition-colors">Profil & Jejak Dedikasi Guru</Link></li>
+              <li><Link to="/bank-soal" className="hover:text-gold-400 transition-colors">Bank Soal Kelas 7, 8, 9</Link></li>
+              <li><Link to="/kuis" className="hover:text-gold-400 transition-colors">Arena Kuis Kilat 20 Detik</Link></li>
+              <li><Link to="/game" className="hover:text-gold-400 transition-colors">Gamifikasi Nilai Pancasila</Link></li>
+              <li><Link to="/portofolio" className="hover:text-gold-400 transition-colors">Galeri Proyek P5 Nusantara</Link></li>
+              <li><Link to="/kontak" className="hover:text-gold-400 transition-colors">Konsultasi Sapa Bu Riska</Link></li>
             </ul>
           </div>
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -31,10 +32,8 @@ export default function HeroSection() {
     let timer;
 
     if (!isDeleting && displayText === fullText) {
-      // Tunggu sebelum menghapus
       timer = setTimeout(() => setIsDeleting(true), 2400);
     } else if (isDeleting && displayText === '') {
-      // Pindah ke kalimat berikutnya
       setIsDeleting(false);
       setCurrentSloganIndex((prev) => (prev + 1) % slogans.length);
       setTypingSpeed(60);
@@ -52,7 +51,7 @@ export default function HeroSection() {
   }, [displayText, isDeleting, currentSloganIndex, typingSpeed]);
 
   return (
-    <section id="beranda" className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
       {/* Background Decorative Circles / National Aura */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none -z-10">
         <div className="absolute top-0 right-10 w-72 h-72 rounded-full bg-gold-200/40 blur-3xl animate-pulse-glow" />
@@ -100,22 +99,22 @@ export default function HeroSection() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <a
-                href="#bank-soal"
+              <Link
+                to="/bank-soal"
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-patriot-600 to-patriot-700 text-white font-bold text-base shadow-soft hover:shadow-glow-patriot hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5"
               >
                 <BookOpenCheck className="w-5 h-5" />
                 <span>Buka Bank Soal SMP</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
 
-              <a
-                href="#kuis"
+              <Link
+                to="/kuis"
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gold-400 hover:bg-gold-500 text-slate-900 font-bold text-base shadow-soft hover:shadow-glow-gold hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5"
               >
                 <Flame className="w-5 h-5 text-patriot-700" />
                 <span>Mulai Kuis Kilat 20 Detik</span>
-              </a>
+              </Link>
             </div>
 
             {/* Quick Metrics Badges */}
@@ -133,7 +132,6 @@ export default function HeroSection() {
           {/* Right Column: Teacher Profile Card (Interactive Parallax / Floating) */}
           <div className="lg:col-span-5 relative flex justify-center">
             
-            {/* Background glowing frame */}
             <div className="relative w-full max-w-md">
               <div className="absolute inset-0 bg-gradient-to-tr from-gold-400 via-patriot-500 to-gold-500 rounded-3xl blur-xl opacity-30 animate-pulse-glow" />
 
@@ -153,17 +151,14 @@ export default function HeroSection() {
                 {/* Teacher Avatar Visual & Name */}
                 <div className="flex flex-col items-center text-center">
                   <div className="relative mb-4">
-                    {/* Stylized Avatar Ring */}
                     <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-3xl p-1 bg-gradient-to-br from-patriot-600 via-gold-400 to-patriot-700 shadow-soft-lg">
                       <div className="w-full h-full rounded-[22px] bg-slate-900 flex flex-col items-center justify-center text-white relative overflow-hidden group">
-                        {/* Motif Halus */}
                         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:8px_8px]" />
                         <span className="text-4xl font-extrabold text-gold-300">RP</span>
                         <span className="text-[11px] font-semibold tracking-wider text-slate-300 mt-1">RISKA PUSPITA</span>
                       </div>
                     </div>
 
-                    {/* Floating verified badge */}
                     <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-1.5 rounded-xl shadow-soft flex items-center justify-center border-2 border-white">
                       <CheckCircle2 className="w-5 h-5" />
                     </div>
@@ -194,15 +189,15 @@ export default function HeroSection() {
                   ))}
                 </div>
 
-                {/* Mini Action to Profile Section */}
+                {/* Link to Profile Page */}
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <a 
-                    href="#profil" 
+                  <Link 
+                    to="/profil" 
                     className="text-xs font-bold text-patriot-700 hover:text-patriot-800 flex items-center gap-1 group"
                   >
-                    <span>Pelajari Rekam Jejak Guru</span>
+                    <span>Buka Halaman Profil Lengkap</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                   <span className="text-xs text-slate-400">Kurikulum Merdeka</span>
                 </div>
 

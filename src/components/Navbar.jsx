@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { 
   BookOpen, 
   HelpCircle, 
@@ -14,9 +15,10 @@ import {
 } from 'lucide-react';
 import { isConfigured } from '../lib/supabaseClient';
 
-export default function Navbar({ onOpenDatabaseModal, activeSection }) {
+export default function Navbar({ onOpenDatabaseModal }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,14 +28,19 @@ export default function Navbar({ onOpenDatabaseModal, activeSection }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Tutup menu mobile saat rute berubah
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const navLinks = [
-    { name: 'Beranda', href: '#beranda', icon: Sparkles },
-    { name: 'Profil Guru', href: '#profil', icon: User },
-    { name: 'Bank Soal', href: '#bank-soal', icon: BookOpen },
-    { name: 'Arena Kuis', href: '#kuis', icon: HelpCircle },
-    { name: 'Zona Game', href: '#game', icon: Gamepad2 },
-    { name: 'Portofolio P5', href: '#portofolio', icon: Award },
-    { name: 'Sapa Bu Riska', href: '#kontak', icon: MessageSquare },
+    { name: 'Beranda', path: '/', icon: Sparkles },
+    { name: 'Profil Guru', path: '/profil', icon: User },
+    { name: 'Bank Soal', path: '/bank-soal', icon: BookOpen },
+    { name: 'Arena Kuis', path: '/kuis', icon: HelpCircle },
+    { name: 'Zona Game', path: '/game', icon: Gamepad2 },
+    { name: 'Portofolio P5', path: '/portofolio', icon: Award },
+    { name: 'Sapa Bu Riska', path: '/kontak', icon: MessageSquare },
   ];
 
   return (
@@ -48,9 +55,8 @@ export default function Navbar({ onOpenDatabaseModal, activeSection }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo Brand */}
-          <a href="#beranda" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-white shadow-soft group-hover:scale-105 transition-transform duration-200">
-              {/* Emblem Pancasila Monogram */}
               <span className="font-extrabold text-lg sm:text-xl tracking-wider text-slate-900">RP</span>
             </div>
             <div>
@@ -66,26 +72,28 @@ export default function Navbar({ onOpenDatabaseModal, activeSection }) {
                 Riska Puspita, S.Pd. • Guru Pendidikan Pancasila
               </p>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
             {navLinks.map((link) => {
               const Icon = link.icon;
-              const isActive = activeSection === link.href.replace('#', '');
               return (
-                <a
+                <NavLink
                   key={link.name}
-                  href={link.href}
-                  className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-patriot-50 text-patriot-700 font-bold'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
-                  }`}
+                  to={link.path}
+                  end={link.path === '/'}
+                  className={({ isActive }) => 
+                    `px-3 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-patriot-50 text-patriot-700 font-bold shadow-soft-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                    }`
+                  }
                 >
                   <Icon className="w-4 h-4 text-slate-400" />
-                  {link.name}
-                </a>
+                  <span>{link.name}</span>
+                </NavLink>
               );
             })}
           </nav>
@@ -124,63 +132,86 @@ export default function Navbar({ onOpenDatabaseModal, activeSection }) {
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
-                <a
+                <NavLink
                   key={link.name}
-                  href={link.href}
+                  to={link.path}
+                  end={link.path === '/'}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-gold-50 hover:text-gold-800 transition-colors"
+                  className={({ isActive }) => 
+                    `flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                      isActive 
+                        ? 'bg-patriot-50 text-patriot-700 font-bold' 
+                        : 'text-slate-700 hover:bg-gold-50 hover:text-gold-800'
+                    }`
+                  }
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="w-4 h-4 text-gold-600" />
                     <span>{link.name}</span>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
-                </a>
+                </NavLink>
               );
             })}
           </div>
         )}
       </header>
 
-      {/* Mobile Bottom Navigation Bar (Thumb-Friendly, as required by PRD 4) */}
+      {/* Mobile Bottom Navigation Bar (Thumb-Friendly, React Router Links) */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1 flex items-center justify-around shadow-soft-lg">
-        <a 
-          href="#bank-soal" 
-          className="flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold text-slate-600 hover:text-patriot-600"
+        <NavLink 
+          to="/bank-soal" 
+          className={({ isActive }) => 
+            `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold ${
+              isActive ? 'text-patriot-700 font-bold' : 'text-slate-600 hover:text-patriot-600'
+            }`
+          }
         >
-          <BookOpen className="w-5 h-5 mb-0.5 text-slate-500" />
+          <BookOpen className="w-5 h-5 mb-0.5" />
           Bank Soal
-        </a>
-        <a 
-          href="#kuis" 
-          className="flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold text-slate-600 hover:text-gold-600"
+        </NavLink>
+        <NavLink 
+          to="/kuis" 
+          className={({ isActive }) => 
+            `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold ${
+              isActive ? 'text-gold-600 font-bold' : 'text-slate-600 hover:text-gold-600'
+            }`
+          }
         >
           <HelpCircle className="w-5 h-5 mb-0.5 text-gold-500" />
           Kuis Kilat
-        </a>
-        <a 
-          href="#game" 
+        </NavLink>
+        <NavLink 
+          to="/game" 
           className="flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold text-patriot-700"
         >
           <div className="w-9 h-9 -mt-4 rounded-full bg-gradient-to-tr from-patriot-600 to-gold-500 text-white flex items-center justify-center shadow-glow-patriot border-2 border-white">
             <Gamepad2 className="w-5 h-5" />
           </div>
           Game
-        </a>
-        <a 
-          href="#portofolio" 
-          className="flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold text-slate-600 hover:text-patriot-600"
+        </NavLink>
+        <NavLink 
+          to="/portofolio" 
+          className={({ isActive }) => 
+            `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold ${
+              isActive ? 'text-patriot-700 font-bold' : 'text-slate-600 hover:text-patriot-600'
+            }`
+          }
         >
-          <Award className="w-5 h-5 mb-0.5 text-slate-500" />
+          <Award className="w-5 h-5 mb-0.5" />
           Proyek P5
-        </a>
-        <a 
-          href="#kontak" 
-          className="flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold text-slate-600 hover:text-patriot-600"
+        </NavLink>
+        <NavLink 
+          to="/kontak" 
+          className={({ isActive }) => 
+            `flex flex-col items-center justify-center min-h-[48px] py-1 px-2 text-[10px] font-semibold ${
+              isActive ? 'text-patriot-700 font-bold' : 'text-slate-600 hover:text-patriot-600'
+            }`
+          }
         >
-          <MessageSquare className="w-5 h-5 mb-0.5 text-slate-500" />
+          <MessageSquare className="w-5 h-5 mb-0.5" />
           Sapa Guru
-        </a>
+        </NavLink>
       </nav>
     </>
   );
