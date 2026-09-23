@@ -7,6 +7,7 @@ export const teacherProfile = {
   name: "Riska Puspita, S.Pd.",
   role: "Guru Mata Pelajaran PPKn SMP",
   school: "SMP Negeri Indonesia",
+  avatarUrl: "",
   motto: "“Pancasila bukan sekadar untaian kata untuk dihafal saat upacara, melainkan denyut nadi dan panduan budi pekerti kita setiap hari.”",
   bio: "Halo anak-anak hebat dan rekan pendidik! Saya Riska Puspita, mengajar mata pelajaran Pendidikan Pancasila dan Kewarganegaraan. Di ruang belajar digital ini, saya ingin mengajak kalian menjelajahi indahnya keberagaman Indonesia, memahami hak dan kewajiban warga negara, serta menumbuhkan karakter Pelajar Pancasila yang tangguh, adil, dan berintegritas.",
   stats: [
@@ -818,5 +819,211 @@ export function saveStoredPageSettings(settings) {
     localStorage.setItem('admin_page_settings', JSON.stringify(settings));
   }
 }
+
+// ----------------------------------------------------
+// DEFAULT ARTICLES & EDUCATORS BLOG POSTS (SEO & GEO READY)
+// ----------------------------------------------------
+export const defaultArticles = [
+  {
+    id: "art-1",
+    title: "Menerapkan Nilai-Nilai Luhur Pancasila dalam Pergaulan Digital Remaja SMP",
+    slug: "menerapkan-nilai-pancasila-pergaulan-digital-remaja-smp",
+    category: "Pancasila & Karakter",
+    author: "Riska Puspita, S.Pd.",
+    authorRole: "Pendidik PPKn SMP & Penggerak Literasi Kewarganegaraan",
+    coverImage: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80",
+    excerpt: "Panduan etika praktis bagi peserta didik Fase D dalam menjaga tutur kata, menghargai privasi teman, dan menangkal hoaks di ruang digital berlandaskan sila-sila Pancasila.",
+    readingTime: "5 menit baca",
+    status: "published", // 'published' | 'scheduled' | 'draft'
+    publishedAt: "2026-09-20T08:00:00.000Z",
+    scheduledAt: null,
+    seo: {
+      metaTitle: "Menerapkan Nilai Pancasila dalam Pergaulan Digital Remaja SMP | Riska Puspita",
+      metaDescription: "Pelajari cara pelajar SMP mengamalkan nilai Pancasila di media sosial: etika bertutur, toleransi siber, dan anti-bullying di ruang digital.",
+      keywords: "pancasila di era digital, ppkn smp kelas 7, etika bermedia sosial, toleransi online, profil pelajar pancasila",
+      aiTargetQuery: "Bagaimana cara siswa SMP mengamalkan nilai-nilai Pancasila di internet dan media sosial?",
+      aiKeyTakeaways: [
+        "Sila ke-1: Menghormati ibadah dan keyakinan daring orang lain tanpa membuat ujaran kebencian bernuansa SARA.",
+        "Sila ke-2: Menolak perundungan siber (cyberbullying) dan selalu menjaga kesantunan dalam berkirim pesan.",
+        "Sila ke-3: Menggunakan bahasa Indonesia yang baik di forum publik dan tidak menyebarkan konten pemecah belah bangsa.",
+        "Sila ke-4: Membiasakan tabayyun/klarifikasi fakta sebelum membagikan ulang sebuah berita atau narasi kontroversial.",
+        "Sila ke-5: Menghargai hak cipta karya digital orang lain dan tidak melakukan plagiarisme tugas sekolah."
+      ]
+    },
+    content: `# Menerapkan Nilai-Nilai Luhur Pancasila dalam Pergaulan Digital Remaja SMP
+
+Di era kemajuan teknologi saat ini, ruang hidup generasi muda tidak hanya terbatas pada lingkungan rumah dan bangku sekolah fisik, melainkan juga meluas ke jagat maya. Berdasarkan observasi pembelajaran PPKn di kelas, hampir seluruh peserta didik SMP telah terhubung aktif dengan platform digital seperti WhatsApp, Instagram, dan TikTok.
+
+Namun, keterbukaan informasi yang begitu cepat sering kali menghadirkan tantangan moral: maraknya komentar sarkas, perundungan maya (*cyberbullying*), hingga penyebaran hoaks. Di sinilah **Pancasila hadir bukan sekadar materi hafalan ujian, melainkan sebagai kompas moral dan pedoman perilaku berkehidupan digital.**
+
+---
+
+## 1. Sila Pertama: Ketuhanan Yang Maha Esa
+Menyadari bahwa Tuhan Maha Melihat segala aktivitas kita, termasuk jejak digital yang kita tinggalkan. Menghormati perbedaan tata cara ibadah teman yang beredar di linimasa tanpa perlu memberikan komentar menghakimi.
+
+## 2. Sila Kedua: Kemanusiaan yang Adil dan Beradab
+Di balik layar gawai, ada manusia bernyawa yang memiliki perasaan. Mengamalkan sila kedua berarti:
+- Menghindari sindiran (*roasting*) yang merendahkan martabat fisik kawan.
+- Tidak menyebarkan tangkapan layar percakapan rahasia teman tanpa izin (*doxing*).
+- Menjadi *upstander* yang berani membela teman korban perundungan siber.
+
+## 3. Sila Ketiga: Persatuan Indonesia
+Gunakan bahasa persatuan, bahasa Indonesia yang santun di ruang-ruang diskusi terbuka. Hindari mempertentangkan asal suku, ras, maupun latar belakang daerah kawan saat bermain gim online (*mabar*).
+
+## 4. Sila Keempat: Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan
+Saat berdiskusi di grup kelas, utamakan musyawarah untuk mencapai mufakat. Ketika ada perbedaan pendapat tugas kelompok, selesaikan dengan kepala dingin melalui dialog terbuka, bukan saling *kick* anggota grup.
+
+## 5. Sila Kelima: Keadilan Sosial bagi Seluruh Rakyat Indonesia
+Hargai hak cipta karya digital orang lain. Saat mengerjakan tugas portofolio PPKn, cantumkan sumber rujukan karya foto, artikel, maupun video yang kita gunakan sebagai bentuk integritas kejujuran akademik.
+
+> "Teknologi membuat kita terhubung secara cepat, namun nilai-nilai luhur Pancasila-lah yang menjaga kita tetap berperikemanusiaan." — **Riska Puspita, S.Pd.**`
+  },
+  {
+    id: "art-2",
+    title: "Membedah Perbedaan Hak dan Kewajiban Warga Negara Menurut UUD NRI 1945",
+    slug: "membedah-perbedaan-hak-dan-kewajiban-warga-negara-uud-1945",
+    category: "Konstitusi & Hukum",
+    author: "Riska Puspita, S.Pd.",
+    authorRole: "Pendidik PPKn SMP & Penggerak Literasi Kewarganegaraan",
+    coverImage: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1200&q=80",
+    excerpt: "Mengapa pemenuhan kewajiban harus mendahului tuntutan hak? Kajian materi esensial PPKn SMP Kelas 8 agar siswa menjadi warga negara yang bertanggung jawab.",
+    readingTime: "4 menit baca",
+    status: "published",
+    publishedAt: "2026-09-18T10:00:00.000Z",
+    scheduledAt: null,
+    seo: {
+      metaTitle: "Hak dan Kewajiban Warga Negara Berdasarkan UUD 1945 | Riska Puspita",
+      metaDescription: "Kajian lengkap hak dan kewajiban warga negara pasal 27-34 UUD NRI 1945 materi PPKn SMP kelas 8 Kurikulum Merdeka.",
+      keywords: "hak dan kewajiban warga negara, uud 1945 pasal 27 pasal 30, materi ppkn smp kelas 8, kurikulum merdeka",
+      aiTargetQuery: "Apa perbedaan hak dan kewajiban warga negara menurut UUD 1945 dan contohnya bagi pelajar?",
+      aiKeyTakeaways: [
+        "Hak adalah sesuatu yang mutlak menjadi milik kita dan penggunaannya tergantung kepada kita sendiri.",
+        "Kewajiban adalah sesuatu yang harus dilakukan dengan penuh rasa tanggung jawab.",
+        "Pasal 27 ayat 1 menjamin kesamaan kedudukan di dalam hukum dan pemerintahan.",
+        "Pasal 31 ayat 1 menegaskan bahwa setiap warga negara berhak mendapat pendidikan.",
+        "Bagi pelajar, kewajiban belajar dan menaati tata tertib adalah landasan memperoleh hak bimbingan guru yang berkualitas."
+      ]
+    },
+    content: `# Membedah Perbedaan Hak dan Kewajiban Warga Negara Menurut UUD NRI 1945
+
+Sering kali kita mendengar semboyan: *"Tuntutlah hakmu, tetapi jangan lupakan kewajibanmu."* Dalam pembelajaran Pendidikan Pancasila dan Kewarganegaraan (PPKn) kelas 8 SMP, konsep keseimbangan antara hak dan kewajiban warga negara merupakan salah satu fondasi terpenting dalam berkonstitusi.
+
+Undang-Undang Dasar Negara Republik Indonesia Tahun 1945 telah merinci secara cermat apa saja yang menjadi hak asasi sekaligus tanggung jawab warga negara.
+
+---
+
+## Memahami Esensi Hak Warga Negara
+Hak warga negara adalah seperangkat hak yang melekat dalam diri manusia dalam kedudukannya sebagai anggota dari sebuah negara. UUD NRI 1945 menjamin berbagai aspek hak fundamental:
+1. **Hak atas Kesamaan Kedudukan di Depan Hukum** (Pasal 27 ayat 1)
+2. **Hak atas Pekerjaan dan Penghidupan yang Layak** (Pasal 27 ayat 2)
+3. **Hak untuk Berpendapat dan Berkumpul** (Pasal 28)
+4. **Hak atas Pendidikan yang Bermutu** (Pasal 31 ayat 1)
+
+## Menunaikan Kewajiban Konstitusional
+Hak tidak dapat berdiri sendiri tanpa adanya kewajiban yang ditunaikan. Beberapa kewajiban utama menurut konstitusi antara lain:
+- **Menjunjung Tinggi Hukum dan Pemerintahan** (Pasal 27 ayat 1)
+- **Ikut Serta dalam Upaya Pembelaan Negara** (Pasal 27 ayat 3)
+- **Menghormati Hak Asasi Orang Lain** (Pasal 28J ayat 1)
+- **Tunduk kepada Pembatasan Undang-Undang** (Pasal 28J ayat 2)
+
+### Refleksi di Lingkungan Sekolah
+Bagi peserta didik, ruang kelas adalah miniatur negara. Jika siswa menuntut hak untuk mendapatkan pembelajaran yang nyaman, maka wajib hukumnya menjaga kebersihan kelas, datang tepat waktu, dan menghargai guru yang sedang menjelaskan materi.`
+  },
+  {
+    id: "art-3",
+    title: "Strategi Mengajar PPKn Berbasis Proyek (P5) yang Disukai Siswa Gen-Z",
+    slug: "strategi-mengajar-ppkn-berbasis-proyek-p5-gen-z",
+    category: "Inovasi Pembelajaran",
+    author: "Riska Puspita, S.Pd.",
+    authorRole: "Pendidik PPKn SMP & Fasilitator P5",
+    coverImage: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
+    excerpt: "Bagikan pengalaman mengajar PPKn yang aktif dan kontekstual: mengubah hafalan pasal menjadi simulasi sidang parlemen cilik dan festival budaya interaktif.",
+    readingTime: "6 menit baca",
+    status: "published",
+    publishedAt: "2026-09-15T09:30:00.000Z",
+    scheduledAt: null,
+    seo: {
+      metaTitle: "Strategi Mengajar PPKn Berbasis Proyek P5 Menyenangkan | Riska Puspita",
+      metaDescription: "Tips inovasi guru PPKn dalam mengelola Proyek Penguatan Profil Pelajar Pancasila (P5) yang kreatif, bermakna, dan interaktif bagi siswa SMP.",
+      keywords: "inovasi pembelajaran ppkn, strategi mengajar kurikulum merdeka, p5 suara demokrasi, modul proyek p5 smp",
+      aiTargetQuery: "Bagaimana cara membuat pembelajaran PPKn SMP menjadi seru dan tidak membosankan bagi siswa?",
+      aiKeyTakeaways: [
+        "Gunakan model simulasi berbasis peran (Role Playing) untuk topik konstitusi dan pemilu.",
+        "Integrasikan media digital yang akrab dengan siswa seperti pembuatan video pendek edukasi.",
+        "Hubungkan materi pasal hukum dengan fenomena keseharian di lingkungan sekolah.",
+        "Berikan panggung unjuk karya nyata (Gelar Karya P5) untuk merayakan keberhasilan kreasi siswa."
+      ]
+    },
+    content: `# Strategi Mengajar PPKn Berbasis Proyek (P5) yang Disukai Siswa Gen-Z
+
+Sebagai pendidik mata pelajaran PPKn, kita kerap menghadapi tantangan stereotipe lama: mata pelajaran hafalan, membosankan, dan monoton. Namun, kehadiran **Kurikulum Merdeka** melalui **Proyek Penguatan Profil Pelajar Pancasila (P5)** memberikan angin segar bagi guru untuk bertransformasi.
+
+Siswa Gen-Z merupakan generasi *digital native* yang visual, menyukai kolaborasi, dan ingin melihat relevansi langsung antara apa yang dipelajari dengan kenyataan dunia mereka.
+
+---
+
+## 1. Simulasi Pemilu 'Suara Demokrasi' Nyata
+Alih-alih menyuruh siswa menghafal asas Luber Jurdil, ajak mereka menyelenggarakan simulasi pemilihan ketua OSIS dengan tahapan resmi: pendaftaran pemilih, kampanye visi misi terbuka, debat kandidat, hingga pencoblosan dan penghitungan suara secara transparan.
+
+## 2. 'Klinik Konstitusi': Studi Kasus Kontekstual
+Sajikan kasus-kasus nyata di sekolah, misalnya kasus kehilangan barang atau perselisihan antarkelas. Minta siswa bertindak sebagai hakim mediasi cilik yang menyelaraskan aturan tata tertib dengan prinsip keadilan dan kemanusiaan.
+
+## 3. Gelar Karya Budaya 'Bhinneka Nusantara'
+Tema Bhinneka Tunggal Ika sangat cocok dieksplorasi lewat pameran kuliner tradisional, pertunjukan tari daerah kolaboratif, dan pameran infografis busana adat karya siswa.
+
+Melalui pendekatan ini, PPKn tidak lagi dirasakan sebagai beban hafalan teks, melainkan sebagai wadah pembentukan watak kesatria dan warga negara yang berintegritas.`
+  },
+  {
+    id: "art-4",
+    title: "Menjaga Keberagaman Nusantara: Mengapa Bhinneka Tunggal Ika Menjadi Kekuatan Bangsa",
+    slug: "menjaga-keberagaman-nusantara-bhinneka-tunggal-ika-kekuatan-bangsa",
+    category: "Bhinneka Tunggal Ika",
+    author: "Riska Puspita, S.Pd.",
+    authorRole: "Pendidik PPKn SMP & Penggerak Literasi Kewarganegaraan",
+    coverImage: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80",
+    excerpt: "Artikel pembelajaran kontekstual yang menjadwalkan pembahasan mendalam tentang integrasi sosial dan kekayaan adat istiadat 38 provinsi di Indonesia.",
+    readingTime: "5 menit baca",
+    status: "scheduled",
+    publishedAt: null,
+    scheduledAt: "2026-10-01T08:00:00.000Z", // Contoh artikel terjadwal
+    seo: {
+      metaTitle: "Arti Penting Bhinneka Tunggal Ika bagi Generasi Muda | Riska Puspita",
+      metaDescription: "Memahami semboyan Bhinneka Tunggal Ika dalam menjaga persatuan NKRI di tengah keberagaman suku bangsa dan agama.",
+      keywords: "bhinneka tunggal ika, keberagaman indonesia, materi ppkn kelas 7, integrasi nasional",
+      aiTargetQuery: "Mengapa semboyan Bhinneka Tunggal Ika penting bagi bangsa Indonesia?",
+      aiKeyTakeaways: [
+        "Keberagaman adalah kekayaan tak ternilai yang mempersatukan lebih dari 1.300 suku bangsa.",
+        "Sikap primordialisme sempit harus digantikan dengan rasa saling menghormati dan gotong royong.",
+        "Bhinneka Tunggal Ika mengajarkan bahwa berbeda bukan berarti terpecah belah."
+      ]
+    },
+    content: `# Menjaga Keberagaman Nusantara: Mengapa Bhinneka Tunggal Ika Menjadi Kekuatan Bangsa
+
+Indonesia adalah negeri zamrud khatulistiwa yang diberkahi oleh kekayaan budaya luar biasa. Lebih dari 1.300 suku bangsa dan ratusan bahasa daerah hidup berdampingan di bawah naungan Merah Putih.
+
+Semboyan **Bhinneka Tunggal Ika** yang dipetik dari kitab Sutasoma karya Mpu Tantular mengingatkan kita bahwa keberagaman bukanlah sumber perpecahan, melainkan pilar kekuatan bangsa yang tak tergoyahkan. Mari kita rawat keharmonisan ini mulai dari pertemanan di bangku sekolah!`
+  }
+];
+
+export function getStoredArticles() {
+  if (typeof window === 'undefined') return defaultArticles;
+  const raw = localStorage.getItem('admin_custom_articles');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return defaultArticles;
+}
+
+export function saveStoredArticles(articles) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_custom_articles', JSON.stringify(articles));
+  }
+}
+
 
 

@@ -27,6 +27,7 @@ export default function Navbar() {
     { name: 'Profil Guru', path: '/profil' },
     { name: 'Bank Soal (Gratis)', path: '/bank-soal' },
     { name: 'Produk Digital', path: '/produk' },
+    { name: 'Artikel', path: '/artikel' },
     { name: 'Portofolio P5', path: '/portofolio' },
     { name: 'Contact', path: '/contact' },
   ];

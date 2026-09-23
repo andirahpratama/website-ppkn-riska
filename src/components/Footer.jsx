@@ -52,6 +52,7 @@ export default function Footer() {
               <li><Link to="/profil" className="hover:text-gold-400 transition-colors">Profil & Dedikasi Guru</Link></li>
               <li><Link to="/bank-soal" className="hover:text-gold-400 transition-colors">Bank Soal PPKn (Download Gratis)</Link></li>
               <li><Link to="/produk" className="hover:text-gold-400 transition-colors">Marketplace Produk Digital Guru</Link></li>
+              <li><Link to="/artikel" className="hover:text-gold-400 transition-colors">Artikel & Wawasan PPKn</Link></li>
               <li><Link to="/portofolio" className="hover:text-gold-400 transition-colors">Galeri Proyek P5 Nusantara</Link></li>
               <li><Link to="/contact" className="hover:text-gold-400 transition-colors">Contact / Hubungi Bu Riska</Link></li>
               <li className="pt-2">

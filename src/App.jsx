@@ -11,6 +11,8 @@ import QuestionBankPage from './pages/QuestionBankPage';
 import ProductsPage from './pages/ProductsPage';
 import PortfolioPage from './pages/PortfolioPage';
 import ContactPage from './pages/ContactPage';
+import ArticlesPage from './pages/ArticlesPage';
+import ArticleDetailPage from './pages/ArticleDetailPage';
 
 // Admin CMS Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -47,6 +49,8 @@ export default function App() {
         <Route path="/bank-soal" element={<PublicLayout><QuestionBankPage /></PublicLayout>} />
         <Route path="/produk" element={<PublicLayout><ProductsPage /></PublicLayout>} />
         <Route path="/portofolio" element={<PublicLayout><PortfolioPage /></PublicLayout>} />
+        <Route path="/artikel" element={<PublicLayout><ArticlesPage /></PublicLayout>} />
+        <Route path="/artikel/:slug" element={<PublicLayout><ArticleDetailPage /></PublicLayout>} />
         <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
         <Route path="/kontak" element={<PublicLayout><ContactPage /></PublicLayout>} />
 

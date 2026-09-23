@@ -32,6 +32,7 @@ import DigitalProductsManagerTab from '../../components/admin/DigitalProductsMan
 import ProfileManagerTab from '../../components/admin/ProfileManagerTab';
 import PortfolioManagerTab from '../../components/admin/PortfolioManagerTab';
 import InquiriesManagerTab from '../../components/admin/InquiriesManagerTab';
+import ArticlesManagerTab from '../../components/admin/ArticlesManagerTab';
 
 import { 
   LayoutDashboard, 
@@ -41,6 +42,7 @@ import {
   User, 
   Award, 
   MessageSquare, 
+  FileText,
   LogOut, 
   ExternalLink, 
   Menu, 
@@ -113,6 +115,7 @@ export default function AdminDashboard() {
   const navItems = [
     { id: 'overview', label: 'Dashboard Utama', icon: LayoutDashboard },
     { id: 'page_settings', label: 'Pengaturan Halaman', icon: Settings },
+    { id: 'articles', label: 'Artikel & SEO AI', icon: FileText },
     { id: 'bank_soal_downloads', label: 'Katalog Bank Soal (Gratis)', icon: BookOpen, count: downloadItems.length },
     { id: 'digital_products', label: 'Produk Digital Marketplace', icon: ShoppingBag, count: digitalProducts.length },
     { id: 'profile', label: 'Profil & Timeline Guru', icon: User },
@@ -309,6 +312,10 @@ export default function AdminDashboard() {
             <PageSettingsTab
               onSettingsUpdated={updatePageSettings}
             />
+          )}
+
+          {activeTab === 'articles' && (
+            <ArticlesManagerTab />
           )}
 
           {activeTab === 'bank_soal_downloads' && (

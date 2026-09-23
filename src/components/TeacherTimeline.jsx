@@ -7,9 +7,10 @@ import {
   Sparkles, 
   Calendar,
   CheckCircle,
-  Quote
+  Quote,
+  Image as ImageIcon
 } from 'lucide-react';
-import { teacherTimeline, teacherProfile } from '../data/ppknData';
+import { getStoredTimeline, getStoredProfile } from '../data/ppknData';
 
 const iconMap = {
   GraduationCap,
@@ -20,7 +21,17 @@ const iconMap = {
 };
 
 export default function TeacherTimeline() {
-  const [selectedMilestone, setSelectedMilestone] = useState(teacherTimeline[teacherTimeline.length - 1]);
+  const timelineData = getStoredTimeline();
+  const profile = getStoredProfile();
+  const [selectedMilestone, setSelectedMilestone] = useState(
+    timelineData.length > 0 ? timelineData[timelineData.length - 1] : null
+  );
+
+  if (!timelineData || timelineData.length === 0) {
+    return null;
+  }
+
+  const activeMilestone = selectedMilestone || timelineData[0];
 
   return (
     <section id="profil" className="py-16 md:py-24 bg-white border-y border-slate-100">
@@ -45,9 +56,9 @@ export default function TeacherTimeline() {
           
           {/* Left / Steps Navigation */}
           <div className="lg:col-span-6 space-y-4">
-            {teacherTimeline.map((item, index) => {
+            {timelineData.map((item, index) => {
               const IconComponent = iconMap[item.icon] || Sparkles;
-              const isSelected = selectedMilestone.year === item.year;
+              const isSelected = activeMilestone.year === item.year && activeMilestone.title === item.title;
 
               return (
                 <div
@@ -60,13 +71,17 @@ export default function TeacherTimeline() {
                   }`}
                 >
                   <div className="flex items-start gap-4">
-                    {/* Year badge & Icon */}
-                    <div className={`p-3 rounded-2xl flex items-center justify-center shrink-0 ${
+                    {/* Year badge & Icon / Thumbnail */}
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden ${
                       isSelected 
                         ? 'bg-patriot-600 text-white shadow-soft' 
                         : 'bg-slate-100 text-slate-600'
                     }`}>
-                      <IconComponent className="w-5 h-5" />
+                      {item.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <IconComponent className="w-5 h-5" />
+                      )}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -111,27 +126,38 @@ export default function TeacherTimeline() {
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gold-400" />
                     <span className="text-gold-400 font-extrabold text-sm tracking-wide">
-                      TAHUN {selectedMilestone.year}
+                      TAHUN {activeMilestone.year}
                     </span>
                   </div>
                   <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                    {selectedMilestone.tag}
+                    {activeMilestone.tag}
                   </span>
                 </div>
 
                 {/* Milestone Title */}
                 <div>
                   <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
-                    {selectedMilestone.title}
+                    {activeMilestone.title}
                   </h3>
                   <p className="text-gold-300/90 text-sm font-semibold mt-1">
-                    {selectedMilestone.subtitle}
+                    {activeMilestone.subtitle}
                   </p>
                 </div>
 
+                {/* Foto Dokumentasi Tonggak Sejarah (Jika Ada) */}
+                {activeMilestone.imageUrl && (
+                  <div className="rounded-2xl overflow-hidden border border-slate-700 shadow-soft max-h-56 w-full">
+                    <img 
+                      src={activeMilestone.imageUrl} 
+                      alt={activeMilestone.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+
                 {/* Narrative description */}
                 <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-slate-300 text-sm sm:text-base leading-relaxed">
-                  {selectedMilestone.description}
+                  {activeMilestone.description}
                 </div>
 
                 {/* Teacher Philosophy Note */}
@@ -144,7 +170,7 @@ export default function TeacherTimeline() {
                       Komitmen Bu Riska untuk Siswa:
                     </p>
                     <p className="text-xs text-slate-400 mt-0.5 leading-normal">
-                      Menjadikan setiap butir nilai kewarganegaraan sebagai teladan praktis di lingkungan sekolah dan keluarga.
+                      {profile.motto || "Menjadikan setiap butir nilai kewarganegaraan sebagai teladan praktis di lingkungan sekolah dan keluarga."}
                     </p>
                   </div>
                 </div>

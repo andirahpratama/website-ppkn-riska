@@ -10,10 +10,12 @@ import {
   Sparkles,
   MessageSquare
 } from 'lucide-react';
-import { teacherProfile, portfolioData } from '../data/ppknData';
+import { getStoredProfile, portfolioData } from '../data/ppknData';
 import { Link } from 'react-router-dom';
 
 export default function ProfilePage() {
+  const teacherProfile = getStoredProfile();
+
   return (
     <div className="pt-24 pb-16">
       {/* Header Banner */}
@@ -40,10 +42,20 @@ export default function ProfilePage() {
 
             <div className="md:col-span-4 flex justify-center md:justify-end">
               <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl p-1 bg-gradient-to-tr from-gold-400 to-patriot-600 shadow-glow-gold">
-                <div className="w-full h-full rounded-[22px] bg-slate-950 flex flex-col items-center justify-center text-white text-center">
-                  <span className="text-5xl font-black text-gold-400">RP</span>
-                  <span className="text-xs font-bold tracking-wider text-slate-300 mt-2">RISKA PUSPITA</span>
-                  <span className="text-[10px] text-slate-400">S.Pd. PPKn</span>
+                <div className="w-full h-full rounded-[22px] bg-slate-950 flex flex-col items-center justify-center text-white text-center overflow-hidden">
+                  {teacherProfile.avatarUrl ? (
+                    <img 
+                      src={teacherProfile.avatarUrl} 
+                      alt={teacherProfile.name} 
+                      className="w-full h-full object-cover" 
+                    />
+                  ) : (
+                    <>
+                      <span className="text-5xl font-black text-gold-400">RP</span>
+                      <span className="text-xs font-bold tracking-wider text-slate-300 mt-2">RISKA PUSPITA</span>
+                      <span className="text-[10px] text-slate-400">S.Pd. PPKn</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
