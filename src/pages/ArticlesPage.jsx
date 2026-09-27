@@ -73,15 +73,7 @@ export default function ArticlesPage() {
             <div className="pt-2 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gold-400 shrink-0 bg-slate-800 flex items-center justify-center text-gold-400 font-bold text-sm">
                 {teacher.avatarUrl ? (
-                  <img 
-                    src={teacher.avatarUrl} 
-                    alt={teacher.name} 
-                    style={{
-                      transform: `scale(${teacher.avatarZoom || 1}) translate(${teacher.avatarX || 0}%, ${teacher.avatarY || 0}%)`,
-                      transformOrigin: 'center center'
-                    }}
-                    className="w-full h-full object-cover" 
-                  />
+                  <img src={teacher.avatarUrl} alt={teacher.name} className="w-full h-full object-cover" />
                 ) : (
                   <span>RP</span>
                 )}
@@ -195,15 +187,7 @@ export default function ArticlesPage() {
                       <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full overflow-hidden bg-slate-900 border border-gold-400 flex items-center justify-center text-gold-400 text-[10px] font-black shrink-0">
                           {teacher.avatarUrl ? (
-                            <img 
-                              src={teacher.avatarUrl} 
-                              alt={teacher.name} 
-                              style={{
-                                transform: `scale(${teacher.avatarZoom || 1}) translate(${teacher.avatarX || 0}%, ${teacher.avatarY || 0}%)`,
-                                transformOrigin: 'center center'
-                              }}
-                              className="w-full h-full object-cover" 
-                            />
+                            <img src={teacher.avatarUrl} alt={teacher.name} className="w-full h-full object-cover" />
                           ) : (
                             <span>RP</span>
                           )}

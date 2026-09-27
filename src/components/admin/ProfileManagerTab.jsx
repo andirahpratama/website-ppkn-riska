@@ -32,6 +32,7 @@ export default function ProfileManagerTab({
   const [timelineList, setTimelineList] = useState([...timeline]);
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
+  const [photoToAdjust, setPhotoToAdjust] = useState('');
   const avatarInputRef = useRef(null);
   const milestoneImageInputRef = useRef(null);
 
@@ -49,21 +50,24 @@ export default function ProfileManagerTab({
     icon: 'Sparkles'
   });
 
-  // Handler Upload Foto Profil Guru
+  // Handler Upload Foto Profil Guru (Langsung buka modal tarik geser & zoom)
   const handleAvatarFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      alert("Ukuran file foto profil maksimal 2MB.");
+    if (file.size > 15 * 1024 * 1024) {
+      alert("Ukuran file foto maksimal 15MB.");
       return;
     }
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setProfileForm(prev => ({ ...prev, avatarUrl: reader.result }));
+      // Langsung munculkan kanvas geser tarik & zoom foto begitu file dipilih!
+      setPhotoToAdjust(reader.result);
+      setIsAdjustModalOpen(true);
     };
     reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   const handleRemoveAvatar = () => {
@@ -71,12 +75,13 @@ export default function ProfileManagerTab({
     if (avatarInputRef.current) avatarInputRef.current.value = '';
   };
 
-  const handleSaveAvatarAdjustment = ({ zoom, x, y }) => {
+  const handleSaveCroppedAvatar = (croppedBase64) => {
     const updated = {
       ...profileForm,
-      avatarZoom: zoom,
-      avatarX: x,
-      avatarY: y
+      avatarUrl: croppedBase64,
+      avatarZoom: 1,
+      avatarX: 0,
+      avatarY: 0
     };
     setProfileForm(updated);
     onUpdateProfile(updated);
@@ -214,10 +219,6 @@ export default function ProfileManagerTab({
                   <img 
                     src={profileForm.avatarUrl} 
                     alt="Foto Profil Bu Riska" 
-                    style={{
-                      transform: `scale(${profileForm.avatarZoom || 1}) translate(${profileForm.avatarX || 0}%, ${profileForm.avatarY || 0}%)`,
-                      transformOrigin: 'center center'
-                    }}
                     className="w-full h-full object-cover select-none pointer-events-none"
                   />
                 ) : (
@@ -241,7 +242,7 @@ export default function ProfileManagerTab({
               <div>
                 <h4 className="text-sm font-extrabold text-slate-900">Foto Profil Resmi</h4>
                 <p className="text-xs text-slate-500">
-                  Gunakan foto formal atau semi-formal resolusi persegi (JPG, PNG, atau WEBP, maks 2MB).
+                  Gunakan foto formal atau semi-formal. Saat Anda memilih file foto, jendela pemotong & pembesar (crop & zoom) akan langsung terbuka otomatis.
                 </p>
               </div>
 
@@ -265,12 +266,15 @@ export default function ProfileManagerTab({
                 {profileForm.avatarUrl && (
                   <button
                     type="button"
-                    onClick={() => setIsAdjustModalOpen(true)}
+                    onClick={() => {
+                      setPhotoToAdjust(profileForm.avatarUrl);
+                      setIsAdjustModalOpen(true);
+                    }}
                     className="px-3.5 py-2 rounded-xl bg-gold-400 hover:bg-gold-500 text-slate-950 text-xs font-black flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
-                    title="Buka panel tarik geser dan zoom foto profil"
+                    title="Posisikan dan potong ulang foto profil"
                   >
                     <Move className="w-3.5 h-3.5" />
-                    <span>Atur Posisi & Zoom (Tarik Geser)</span>
+                    <span>Posisikan / Crop Foto</span>
                   </button>
                 )}
 
@@ -615,11 +619,8 @@ export default function ProfileManagerTab({
       <AvatarAdjustModal
         isOpen={isAdjustModalOpen}
         onClose={() => setIsAdjustModalOpen(false)}
-        imageUrl={profileForm.avatarUrl}
-        currentZoom={profileForm.avatarZoom || 1}
-        currentX={profileForm.avatarX || 0}
-        currentY={profileForm.avatarY || 0}
-        onSave={handleSaveAvatarAdjustment}
+        imageUrl={photoToAdjust || profileForm.avatarUrl}
+        onSave={handleSaveCroppedAvatar}
       />
 
     </div>

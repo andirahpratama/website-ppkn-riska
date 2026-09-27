@@ -71,12 +71,13 @@ export default function HomePage() {
     return () => window.removeEventListener('teacher-profile-updated', handleProfileUpdate);
   }, []);
 
-  const handleSaveAvatarAdjustment = ({ zoom, x, y }) => {
+  const handleSaveCroppedAvatar = (croppedBase64) => {
     const updated = {
       ...teacher,
-      avatarZoom: zoom,
-      avatarX: x,
-      avatarY: y
+      avatarUrl: croppedBase64,
+      avatarZoom: 1,
+      avatarX: 0,
+      avatarY: 0
     };
     setTeacher(updated);
     saveStoredProfile(updated);
@@ -113,10 +114,6 @@ export default function HomePage() {
                       <img 
                         src={teacher.avatarUrl} 
                         alt={teacher.name || "Riska Puspita, S.Pd."} 
-                        style={{
-                          transform: `scale(${teacher.avatarZoom || 1}) translate(${teacher.avatarX || 0}%, ${teacher.avatarY || 0}%)`,
-                          transformOrigin: 'center center'
-                        }}
                         className="w-full h-full object-cover select-none pointer-events-none"
                       />
                     </div>
@@ -425,10 +422,6 @@ export default function HomePage() {
                     <img 
                       src={teacher.avatarUrl} 
                       alt={teacher.name} 
-                      style={{
-                        transform: `scale(${teacher.avatarZoom || 1}) translate(${teacher.avatarX || 0}%, ${teacher.avatarY || 0}%)`,
-                        transformOrigin: 'center center'
-                      }}
                       className="w-full h-full object-cover" 
                     />
                   ) : (
@@ -595,10 +588,7 @@ export default function HomePage() {
         isOpen={isAdjustModalOpen}
         onClose={() => setIsAdjustModalOpen(false)}
         imageUrl={teacher.avatarUrl}
-        currentZoom={teacher.avatarZoom || 1}
-        currentX={teacher.avatarX || 0}
-        currentY={teacher.avatarY || 0}
-        onSave={handleSaveAvatarAdjustment}
+        onSave={handleSaveCroppedAvatar}
       />
 
     </div>

@@ -29,12 +29,13 @@ export default function ProfilePage() {
     return () => window.removeEventListener('teacher-profile-updated', handleProfileUpdate);
   }, []);
 
-  const handleSaveAvatarAdjustment = ({ zoom, x, y }) => {
+  const handleSaveCroppedAvatar = (croppedBase64) => {
     const updated = {
       ...teacherProfile,
-      avatarZoom: zoom,
-      avatarX: x,
-      avatarY: y
+      avatarUrl: croppedBase64,
+      avatarZoom: 1,
+      avatarX: 0,
+      avatarY: 0
     };
     setTeacherProfile(updated);
     saveStoredProfile(updated);
@@ -71,10 +72,6 @@ export default function ProfilePage() {
                     <img 
                       src={teacherProfile.avatarUrl} 
                       alt={teacherProfile.name} 
-                      style={{
-                        transform: `scale(${teacherProfile.avatarZoom || 1}) translate(${teacherProfile.avatarX || 0}%, ${teacherProfile.avatarY || 0}%)`,
-                        transformOrigin: 'center center'
-                      }}
                       className="w-full h-full object-cover select-none pointer-events-none" 
                     />
                   ) : (
@@ -171,10 +168,7 @@ export default function ProfilePage() {
         isOpen={isAdjustModalOpen}
         onClose={() => setIsAdjustModalOpen(false)}
         imageUrl={teacherProfile.avatarUrl}
-        currentZoom={teacherProfile.avatarZoom || 1}
-        currentX={teacherProfile.avatarX || 0}
-        currentY={teacherProfile.avatarY || 0}
-        onSave={handleSaveAvatarAdjustment}
+        onSave={handleSaveCroppedAvatar}
       />
 
     </div>
