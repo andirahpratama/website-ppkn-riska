@@ -8,6 +8,9 @@ export const teacherProfile = {
   role: "Guru Mata Pelajaran PPKn SMP",
   school: "SMP Negeri Indonesia",
   avatarUrl: "",
+  avatarZoom: 1,
+  avatarX: 0,
+  avatarY: 0,
   motto: "“Pancasila bukan sekadar untaian kata untuk dihafal saat upacara, melainkan denyut nadi dan panduan budi pekerti kita setiap hari.”",
   bio: "Halo anak-anak hebat dan rekan pendidik! Saya Riska Puspita, mengajar mata pelajaran Pendidikan Pancasila dan Kewarganegaraan. Di ruang belajar digital ini, saya ingin mengajak kalian menjelajahi indahnya keberagaman Indonesia, memahami hak dan kewajiban warga negara, serta menumbuhkan karakter Pelajar Pancasila yang tangguh, adil, dan berintegritas.",
   stats: [
@@ -445,7 +448,14 @@ export function getStoredProfile() {
   const raw = localStorage.getItem('admin_custom_profile');
   if (raw) {
     try {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      return {
+        ...teacherProfile,
+        ...parsed,
+        avatarZoom: typeof parsed.avatarZoom === 'number' ? parsed.avatarZoom : 1,
+        avatarX: typeof parsed.avatarX === 'number' ? parsed.avatarX : 0,
+        avatarY: typeof parsed.avatarY === 'number' ? parsed.avatarY : 0,
+      };
     } catch {
       // fallback
     }
@@ -456,6 +466,7 @@ export function getStoredProfile() {
 export function saveStoredProfile(profile) {
   if (typeof window !== 'undefined') {
     localStorage.setItem('admin_custom_profile', JSON.stringify(profile));
+    window.dispatchEvent(new CustomEvent('teacher-profile-updated', { detail: profile }));
   }
 }
 

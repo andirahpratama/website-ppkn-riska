@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TeacherTimeline from '../components/TeacherTimeline';
 import { 
   User, 
@@ -8,13 +8,37 @@ import {
   Heart, 
   BookOpen, 
   Sparkles,
-  MessageSquare
+  MessageSquare,
+  Move
 } from 'lucide-react';
-import { getStoredProfile, portfolioData } from '../data/ppknData';
+import { getStoredProfile, saveStoredProfile, portfolioData } from '../data/ppknData';
+import { isAdminAuthenticated } from '../lib/adminAuth';
+import AvatarAdjustModal from '../components/AvatarAdjustModal';
 import { Link } from 'react-router-dom';
 
 export default function ProfilePage() {
-  const teacherProfile = getStoredProfile();
+  const [teacherProfile, setTeacherProfile] = useState(() => getStoredProfile());
+  const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
+  const isAdmin = isAdminAuthenticated();
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setTeacherProfile(getStoredProfile());
+    };
+    window.addEventListener('teacher-profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('teacher-profile-updated', handleProfileUpdate);
+  }, []);
+
+  const handleSaveAvatarAdjustment = ({ zoom, x, y }) => {
+    const updated = {
+      ...teacherProfile,
+      avatarZoom: zoom,
+      avatarX: x,
+      avatarY: y
+    };
+    setTeacherProfile(updated);
+    saveStoredProfile(updated);
+  };
 
   return (
     <div className="pt-24 pb-16">
@@ -41,13 +65,17 @@ export default function ProfilePage() {
             </div>
 
             <div className="md:col-span-4 flex justify-center md:justify-end">
-              <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl p-1 bg-gradient-to-tr from-gold-400 to-patriot-600 shadow-glow-gold">
-                <div className="w-full h-full rounded-[22px] bg-slate-950 flex flex-col items-center justify-center text-white text-center overflow-hidden">
+              <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl p-1 bg-gradient-to-tr from-gold-400 to-patriot-600 shadow-glow-gold relative group">
+                <div className="w-full h-full rounded-[22px] bg-slate-950 flex flex-col items-center justify-center text-white text-center overflow-hidden relative">
                   {teacherProfile.avatarUrl ? (
                     <img 
                       src={teacherProfile.avatarUrl} 
                       alt={teacherProfile.name} 
-                      className="w-full h-full object-cover" 
+                      style={{
+                        transform: `scale(${teacherProfile.avatarZoom || 1}) translate(${teacherProfile.avatarX || 0}%, ${teacherProfile.avatarY || 0}%)`,
+                        transformOrigin: 'center center'
+                      }}
+                      className="w-full h-full object-cover select-none pointer-events-none" 
                     />
                   ) : (
                     <>
@@ -57,6 +85,18 @@ export default function ProfilePage() {
                     </>
                   )}
                 </div>
+
+                {/* Tombol Atur Posisi (Jika Admin) */}
+                {isAdmin && teacherProfile.avatarUrl && (
+                  <button
+                    onClick={() => setIsAdjustModalOpen(true)}
+                    className="absolute -bottom-2 -right-2 z-20 bg-slate-900 hover:bg-slate-800 text-gold-400 px-3 py-1.5 rounded-full text-xs font-black shadow-xl border border-gold-400 flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
+                    title="Atur Posisi & Zoom Foto (Tarik Geser)"
+                  >
+                    <Move className="w-3.5 h-3.5" />
+                    <span>Atur Foto</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -125,6 +165,18 @@ export default function ProfilePage() {
 
         </div>
       </div>
+
+      {/* Modal Tarik Geser & Zoom Foto Profil */}
+      <AvatarAdjustModal
+        isOpen={isAdjustModalOpen}
+        onClose={() => setIsAdjustModalOpen(false)}
+        imageUrl={teacherProfile.avatarUrl}
+        currentZoom={teacherProfile.avatarZoom || 1}
+        currentX={teacherProfile.avatarX || 0}
+        currentY={teacherProfile.avatarY || 0}
+        onSave={handleSaveAvatarAdjustment}
+      />
+
     </div>
   );
 }

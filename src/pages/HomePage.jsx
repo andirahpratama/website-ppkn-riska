@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
@@ -14,15 +14,19 @@ import {
   ExternalLink,
   Heart,
   Clock,
-  Calendar
+  Calendar,
+  Move
 } from 'lucide-react';
 import { 
   getStoredPageSettings, 
   getStoredProfile, 
+  saveStoredProfile,
   getStoredArticles, 
   getStoredBankSoalDownloads, 
   getStoredDigitalProducts 
 } from '../data/ppknData';
+import { isAdminAuthenticated } from '../lib/adminAuth';
+import AvatarAdjustModal from '../components/AvatarAdjustModal';
 
 // Clean SVG components for brand channels
 const InstagramIcon = ({ className }) => (
@@ -52,10 +56,31 @@ const WhatsappIcon = ({ className }) => (
 );
 
 export default function HomePage() {
-  const teacher = getStoredProfile();
+  const [teacher, setTeacher] = useState(() => getStoredProfile());
+  const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
+  const isAdmin = isAdminAuthenticated();
   const pageSettings = getStoredPageSettings();
   const contact = pageSettings.contact || {};
   const articles = getStoredArticles().slice(0, 3);
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setTeacher(getStoredProfile());
+    };
+    window.addEventListener('teacher-profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('teacher-profile-updated', handleProfileUpdate);
+  }, []);
+
+  const handleSaveAvatarAdjustment = ({ zoom, x, y }) => {
+    const updated = {
+      ...teacher,
+      avatarZoom: zoom,
+      avatarX: x,
+      avatarY: y
+    };
+    setTeacher(updated);
+    saveStoredProfile(updated);
+  };
 
   const waLink = contact.whatsappNumber 
     ? `https://wa.me/${contact.whatsappNumber}?text=Halo%20Bu%20Riska%20Puspita,%20saya%20tertarik%20berdiskusi%20dan%20berkolaborasi` 
@@ -82,13 +107,19 @@ export default function HomePage() {
                 <div className="absolute -inset-2 sm:-inset-3 rounded-full border-2 border-slate-900/10 pointer-events-none" />
                 
                 {/* Main Circular Avatar Frame */}
-                <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full p-2.5 bg-white shadow-2xl relative overflow-hidden flex items-center justify-center border-4 border-slate-900">
+                <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full p-2.5 bg-white shadow-2xl relative overflow-hidden flex items-center justify-center border-4 border-slate-900 group">
                   {teacher.avatarUrl ? (
-                    <img 
-                      src={teacher.avatarUrl} 
-                      alt={teacher.name || "Riska Puspita, S.Pd."} 
-                      className="w-full h-full rounded-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+                      <img 
+                        src={teacher.avatarUrl} 
+                        alt={teacher.name || "Riska Puspita, S.Pd."} 
+                        style={{
+                          transform: `scale(${teacher.avatarZoom || 1}) translate(${teacher.avatarX || 0}%, ${teacher.avatarY || 0}%)`,
+                          transformOrigin: 'center center'
+                        }}
+                        className="w-full h-full object-cover select-none pointer-events-none"
+                      />
+                    </div>
                   ) : (
                     <div className="w-full h-full rounded-full bg-slate-950 flex flex-col items-center justify-center text-white text-center p-4">
                       <span className="text-6xl sm:text-7xl font-black text-gold-400">RP</span>
@@ -102,6 +133,18 @@ export default function HomePage() {
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Pendidik PPKn</span>
                   </div>
+
+                  {/* Tombol Atur Posisi Langsung (Jika Admin) */}
+                  {isAdmin && teacher.avatarUrl && (
+                    <button
+                      onClick={() => setIsAdjustModalOpen(true)}
+                      className="absolute top-4 right-4 z-20 bg-slate-900/90 hover:bg-slate-900 text-gold-400 px-3 py-1.5 rounded-full text-xs font-black shadow-xl border border-gold-400 flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
+                      title="Atur Posisi & Zoom Foto (Tarik Geser)"
+                    >
+                      <Move className="w-3.5 h-3.5" />
+                      <span>Atur Foto</span>
+                    </button>
+                  )}
                 </div>
 
               </div>
@@ -377,11 +420,15 @@ export default function HomePage() {
               <div className="w-full max-w-md bg-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border-4 border-slate-900 relative">
                 
                 {/* Image Holder */}
-                <div className="rounded-2xl overflow-hidden aspect-4/3 bg-slate-800 mb-6 border border-slate-700">
+                <div className="rounded-2xl overflow-hidden aspect-4/3 bg-slate-800 mb-6 border border-slate-700 flex items-center justify-center relative">
                   {teacher.avatarUrl ? (
                     <img 
                       src={teacher.avatarUrl} 
                       alt={teacher.name} 
+                      style={{
+                        transform: `scale(${teacher.avatarZoom || 1}) translate(${teacher.avatarX || 0}%, ${teacher.avatarY || 0}%)`,
+                        transformOrigin: 'center center'
+                      }}
                       className="w-full h-full object-cover" 
                     />
                   ) : (
@@ -390,6 +437,15 @@ export default function HomePage() {
                       alt="Aktivitas Pembelajaran Bu Riska" 
                       className="w-full h-full object-cover"
                     />
+                  )}
+                  {isAdmin && teacher.avatarUrl && (
+                    <button
+                      onClick={() => setIsAdjustModalOpen(true)}
+                      className="absolute top-3 right-3 bg-slate-900/80 hover:bg-slate-900 text-gold-400 px-2.5 py-1 rounded-full text-[11px] font-bold border border-gold-400/50 flex items-center gap-1 transition-all"
+                    >
+                      <Move className="w-3 h-3" />
+                      <span>Atur Posisi</span>
+                    </button>
                   )}
                 </div>
 
@@ -533,6 +589,17 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Modal Tarik Geser & Zoom Foto Profil */}
+      <AvatarAdjustModal
+        isOpen={isAdjustModalOpen}
+        onClose={() => setIsAdjustModalOpen(false)}
+        imageUrl={teacher.avatarUrl}
+        currentZoom={teacher.avatarZoom || 1}
+        currentX={teacher.avatarX || 0}
+        currentY={teacher.avatarY || 0}
+        onSave={handleSaveAvatarAdjustment}
+      />
 
     </div>
   );

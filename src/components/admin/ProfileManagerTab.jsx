@@ -6,16 +6,15 @@ import {
   Trash2, 
   Edit3,
   CheckCircle2, 
-  Quote, 
-  Award,
-  Sparkles,
   Save,
   X,
   Upload,
   Image as ImageIcon,
   Camera,
-  RotateCcw
+  Move,
+  ZoomIn
 } from 'lucide-react';
+import AvatarAdjustModal from '../AvatarAdjustModal';
 
 export default function ProfileManagerTab({ 
   profile, 
@@ -25,10 +24,14 @@ export default function ProfileManagerTab({
 }) {
   const [profileForm, setProfileForm] = useState({ 
     avatarUrl: '',
+    avatarZoom: 1,
+    avatarX: 0,
+    avatarY: 0,
     ...profile 
   });
   const [timelineList, setTimelineList] = useState([...timeline]);
   const [isSavedAlert, setIsSavedAlert] = useState(false);
+  const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
   const avatarInputRef = useRef(null);
   const milestoneImageInputRef = useRef(null);
 
@@ -64,8 +67,21 @@ export default function ProfileManagerTab({
   };
 
   const handleRemoveAvatar = () => {
-    setProfileForm(prev => ({ ...prev, avatarUrl: '' }));
+    setProfileForm(prev => ({ ...prev, avatarUrl: '', avatarZoom: 1, avatarX: 0, avatarY: 0 }));
     if (avatarInputRef.current) avatarInputRef.current.value = '';
+  };
+
+  const handleSaveAvatarAdjustment = ({ zoom, x, y }) => {
+    const updated = {
+      ...profileForm,
+      avatarZoom: zoom,
+      avatarX: x,
+      avatarY: y
+    };
+    setProfileForm(updated);
+    onUpdateProfile(updated);
+    setIsSavedAlert(true);
+    setTimeout(() => setIsSavedAlert(false), 3000);
   };
 
   const handleSaveProfile = (e) => {
@@ -193,12 +209,16 @@ export default function ProfileManagerTab({
           {/* UPLOAD FOTO PROFIL SECTION */}
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center gap-6">
             <div className="relative group shrink-0">
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-2 border-gold-400 shadow-soft bg-slate-900 flex items-center justify-center text-white">
+              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-2 border-gold-400 shadow-soft bg-slate-900 flex items-center justify-center text-white relative">
                 {profileForm.avatarUrl ? (
                   <img 
                     src={profileForm.avatarUrl} 
                     alt="Foto Profil Bu Riska" 
-                    className="w-full h-full object-cover"
+                    style={{
+                      transform: `scale(${profileForm.avatarZoom || 1}) translate(${profileForm.avatarX || 0}%, ${profileForm.avatarY || 0}%)`,
+                      transformOrigin: 'center center'
+                    }}
+                    className="w-full h-full object-cover select-none pointer-events-none"
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center p-2 text-center">
@@ -241,6 +261,18 @@ export default function ProfileManagerTab({
                   <Upload className="w-3.5 h-3.5 text-patriot-600" />
                   <span>Unggah dari Komputer</span>
                 </button>
+
+                {profileForm.avatarUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setIsAdjustModalOpen(true)}
+                    className="px-3.5 py-2 rounded-xl bg-gold-400 hover:bg-gold-500 text-slate-950 text-xs font-black flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                    title="Buka panel tarik geser dan zoom foto profil"
+                  >
+                    <Move className="w-3.5 h-3.5" />
+                    <span>Atur Posisi & Zoom (Tarik Geser)</span>
+                  </button>
+                )}
 
                 {profileForm.avatarUrl && (
                   <button
@@ -578,6 +610,17 @@ export default function ProfileManagerTab({
           </div>
         </div>
       )}
+
+      {/* Modal Tarik Geser & Zoom Foto Profil */}
+      <AvatarAdjustModal
+        isOpen={isAdjustModalOpen}
+        onClose={() => setIsAdjustModalOpen(false)}
+        imageUrl={profileForm.avatarUrl}
+        currentZoom={profileForm.avatarZoom || 1}
+        currentX={profileForm.avatarX || 0}
+        currentY={profileForm.avatarY || 0}
+        onSave={handleSaveAvatarAdjustment}
+      />
 
     </div>
   );
