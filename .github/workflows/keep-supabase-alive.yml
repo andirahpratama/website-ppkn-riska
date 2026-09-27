@@ -1,0 +1,31 @@
+name: Keep Supabase Alive (Auto Ping Tiap 3 Hari)
+
+# Workflow ini secara otomatis mengirim sinyal 'ping' ke database Supabase Anda
+# setiap 3 hari sekali agar akun/proyek Supabase (free tier) tetap aktif
+# dan terhindar dari jeda nonaktif (auto-pause 7 hari).
+
+on:
+  schedule:
+    # Berjalan setiap 3 hari sekali pada jam 03:00 UTC (10:00 WIB)
+    - cron: '0 3 */3 * *'
+  # Memungkinkan Anda menjalankan ping manual kapan saja melalui tab Actions di GitHub
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    name: Ping Database Supabase
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Eksekusi Ping Keep-Alive
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: node scripts/ping-supabase.mjs

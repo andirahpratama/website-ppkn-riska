@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, 
   Trophy, 
@@ -7,20 +7,79 @@ import {
   TrendingUp, 
   Clock, 
   CheckCircle2, 
+  AlertCircle,
   ArrowRight,
   Database,
-  Sparkles
+  Sparkles,
+  Zap,
+  RefreshCw,
+  Activity,
+  ShieldCheck,
+  Settings2,
+  Calendar
 } from 'lucide-react';
 import { isConfigured } from '../../lib/supabaseClient';
+import { pingSupabase, getSupabasePingStatus } from '../../lib/supabasePing';
 
 export default function OverviewTab({ 
   questions, 
   leaderboard, 
   consultations, 
   portfolio,
-  onNavigateTab 
+  onNavigateTab,
+  onOpenSupabaseModal
 }) {
   const unreadMessagesCount = consultations.filter(c => c.status === 'Belum Dibaca').length;
+
+  // Supabase Ping States
+  const [pingStatus, setPingStatus] = useState(() => getSupabasePingStatus());
+  const [isPinging, setIsPinging] = useState(false);
+  const [pingFeedback, setPingFeedback] = useState(null);
+
+  // Sync ping status when updated
+  useEffect(() => {
+    const handlePingUpdated = () => {
+      setPingStatus(getSupabasePingStatus());
+    };
+
+    window.addEventListener('supabase-ping-updated', handlePingUpdated);
+    return () => window.removeEventListener('supabase-ping-updated', handlePingUpdated);
+  }, []);
+
+  const handleManualPing = async () => {
+    setIsPinging(true);
+    setPingFeedback(null);
+    try {
+      const result = await pingSupabase({ type: 'manual' });
+      setPingFeedback(result);
+      setPingStatus(getSupabasePingStatus());
+    } catch (err) {
+      setPingFeedback({
+        success: false,
+        message: err.message || 'Gagal menghubungi server Supabase.',
+        latency: 0
+      });
+    } finally {
+      setIsPinging(false);
+    }
+  };
+
+  const formatDateTime = (isoString) => {
+    if (!isoString) return 'Belum pernah';
+    try {
+      const date = new Date(isoString);
+      if (isNaN(date.getTime())) return 'Belum pernah';
+      return date.toLocaleString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) + ' WIB';
+    } catch {
+      return isoString;
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -55,6 +114,137 @@ export default function OverviewTab({
             <span>Lihat Pesan Siswa</span>
           </button>
         </div>
+      </div>
+
+      {/* Supabase Keep-Alive & Auto-Ping Card */}
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-soft space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${
+              isConfigured ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+            }`}>
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-extrabold text-slate-900 text-sm sm:text-base">
+                  Pemeliharaan Database Supabase (Keep-Alive)
+                </h3>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold flex items-center gap-1 ${
+                  isConfigured 
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                    : 'bg-amber-50 text-amber-700 border border-amber-200'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                  {isConfigured ? 'Database Aktif' : 'Mode Demo'}
+                </span>
+              </div>
+              <p className="text-[11px] sm:text-xs text-slate-500">
+                Sistem otomatis melakukan ping setiap 3 hari sekali agar proyek Supabase terhindar dari auto-pause 7-hari.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleManualPing}
+              disabled={isPinging || !isConfigured}
+              title="Kirim sinyal ping langsung ke database Supabase"
+              className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 shadow-sm ${
+                !isConfigured
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
+                  : isPinging
+                  ? 'bg-amber-500 text-slate-950 cursor-wait'
+                  : 'bg-slate-900 hover:bg-slate-800 text-gold-400 hover:text-gold-300'
+              }`}
+            >
+              <Zap className={`w-3.5 h-3.5 text-gold-400 ${isPinging ? 'animate-bounce' : ''}`} />
+              <span>{isPinging ? 'Sedang Ping...' : '⚡ Ping Supabase Sekarang'}</span>
+            </button>
+
+            {onOpenSupabaseModal && (
+              <button
+                onClick={onOpenSupabaseModal}
+                className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1.5"
+                title="Buka pengaturan Supabase, kredensial, dan riwayat log lengkap"
+              >
+                <Settings2 className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Kelola & Log</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* 3 Metric Pills */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+            <div className="flex items-center justify-between text-slate-500 text-[11px]">
+              <span className="font-semibold flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                Ping Terakhir
+              </span>
+              {pingStatus.lastPingLatency !== null && (
+                <span className="text-emerald-600 font-extrabold text-[10px]">
+                  {pingStatus.lastPingLatency} ms
+                </span>
+              )}
+            </div>
+            <p className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+              {formatDateTime(pingStatus.lastPingTime)}
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+            <div className="flex items-center justify-between text-slate-500 text-[11px]">
+              <span className="font-semibold flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                Jadwal Auto-Ping Berikutnya
+              </span>
+              <span className="text-[10px] text-purple-600 font-bold">
+                Tiap 3 Hari
+              </span>
+            </div>
+            <p className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+              {formatDateTime(pingStatus.nextPingTime)}
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+            <div className="flex items-center justify-between text-slate-500 text-[11px]">
+              <span className="font-semibold flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                Status Proteksi Jeda (7 Hari)
+              </span>
+            </div>
+            <p className="font-bold text-xs sm:text-sm text-emerald-700">
+              {isConfigured ? '✅ Terlindungi (Siklus 3 Hari Aktif)' : '⚠️ Kredensial Belum Terpasang'}
+            </p>
+          </div>
+        </div>
+
+        {/* Live Feedback Toast Banner */}
+        {pingFeedback && (
+          <div className={`p-3.5 rounded-2xl text-xs flex items-center justify-between gap-3 animate-fadeIn border ${
+            pingFeedback.success
+              ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+              : 'bg-red-50 border-red-300 text-red-900'
+          }`}>
+            <div className="flex items-center gap-2">
+              {pingFeedback.success ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+              )}
+              <span className="font-bold">{pingFeedback.message}</span>
+            </div>
+            {pingFeedback.latency > 0 && (
+              <span className="font-black text-[11px] px-2 py-0.5 rounded-md bg-white border border-emerald-200">
+                {pingFeedback.latency} ms
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 4 Metrics Cards */}

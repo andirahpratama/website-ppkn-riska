@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { checkAndAutoPingSupabase } from './lib/supabasePing';
 
 // Public Pages
 import HomePage from './pages/HomePage';
@@ -32,6 +33,11 @@ function PublicLayout({ children }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    // Menjalankan pengecekan dan ping otomatis 3-harian secara hening di latar belakang
+    checkAndAutoPingSupabase();
+  }, []);
+
   return (
     <BrowserRouter>
       {/* Reset Scroll ke puncak layar saat rute berubah */}

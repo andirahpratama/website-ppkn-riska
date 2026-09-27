@@ -60,3 +60,17 @@ Lihat panduan lengkap langkah-demi-langkah pada file [walkthrough.md](file:///C:
 1. **Supabase**: Buka SQL Editor di [supabase.com](https://supabase.com), jalankan query dari file `supabase_schema.sql`, lalu salin `Project URL` dan `anon key`.
 2. **GitHub**: Lakukan `git init`, `git add .`, `git commit -m "feat: website ppkn riska"`, lalu push ke repositori GitHub Anda.
 3. **Vercel**: Import repositori di [vercel.com](https://vercel.com), tambahkan Environment Variables `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY`, lalu klik **Deploy**.
+
+---
+
+## ⚡ Pemeliharaan Database Supabase (Keep-Alive 3-Hari)
+
+Supabase (Free Tier) akan mengalami *auto-pause* jika tidak ada aktivitas selama 7 hari. Proyek ini dilengkapi sistem proteksi berlapis:
+
+1. **Auto-Ping In-App (Tiap 3 Hari Sekali)**: Setiap kali website/admin dibuka, sistem secara otomatis mengecek apakah sudah lewat 3 hari sejak ping terakhir. Jika sudah, sinyal keep-alive dikirimkan secara otomatis di latar belakang.
+2. **Tombol Ping Manual di Admin**: Tersedia di Dashboard Utama dan Topbar Admin untuk menguji latensi dan menjaga database tetap responsif kapan saja.
+3. **Cloud Cron (GitHub Actions)**: File `.github/workflows/keep-supabase-alive.yml` siap berjalan otomatis setiap 3 hari sekali (pukul 03:00 UTC) di server GitHub Actions, menjaga database tetap aktif 24/7 tanpa perlu membuka website.
+4. **Uji Manual via CLI**:
+   ```bash
+   npm run ping:supabase
+   ```

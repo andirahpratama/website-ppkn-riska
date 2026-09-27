@@ -33,6 +33,8 @@ import ProfileManagerTab from '../../components/admin/ProfileManagerTab';
 import PortfolioManagerTab from '../../components/admin/PortfolioManagerTab';
 import InquiriesManagerTab from '../../components/admin/InquiriesManagerTab';
 import ArticlesManagerTab from '../../components/admin/ArticlesManagerTab';
+import SupabaseModal from '../../components/SupabaseModal';
+import { isConfigured } from '../../lib/supabaseClient';
 
 import { 
   LayoutDashboard, 
@@ -46,13 +48,16 @@ import {
   LogOut, 
   ExternalLink, 
   Menu, 
-  X
+  X,
+  Database,
+  Zap
 } from 'lucide-react';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [supabaseModalOpen, setSupabaseModalOpen] = useState(false);
 
   // Data States
   const [downloadItems, setDownloadItems] = useState(() => getStoredBankSoalDownloads());
@@ -164,6 +169,23 @@ export default function AdminDashboard() {
 
         {/* Topbar Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            onClick={() => setSupabaseModalOpen(true)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border shadow-soft-sm ${
+              isConfigured
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                : 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+            }`}
+            title="Kelola Supabase & Ping Keep-Alive"
+          >
+            <Database className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden md:inline">{isConfigured ? 'Supabase Live' : 'Supabase Demo'}</span>
+            <span className="flex items-center gap-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-white border border-slate-200">
+              <Zap className="w-2.5 h-2.5 text-amber-500" />
+              <span>Ping</span>
+            </span>
+          </button>
+
           <Link
             to="/"
             target="_blank"
@@ -305,6 +327,7 @@ export default function AdminDashboard() {
               consultations={consultations}
               portfolio={portfolio}
               onNavigateTab={(tabId) => setActiveTab(tabId)}
+              onOpenSupabaseModal={() => setSupabaseModalOpen(true)}
             />
           )}
 
@@ -357,6 +380,12 @@ export default function AdminDashboard() {
         </main>
 
       </div>
+
+      {/* Modal Pengaturan & Auto-Ping Supabase */}
+      <SupabaseModal
+        isOpen={supabaseModalOpen}
+        onClose={() => setSupabaseModalOpen(false)}
+      />
 
     </div>
   );
