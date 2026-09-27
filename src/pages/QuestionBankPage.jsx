@@ -180,47 +180,25 @@ export default function QuestionBankPage() {
                   </p>
                 </div>
 
-                {/* Rating & Downloads count */}
-                <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
-                  <div className="flex items-center gap-1 text-gold-500 font-bold">
-                    <Star className="w-3.5 h-3.5 fill-gold-400" />
-                    <span>{item.rating}</span>
-                    <span className="text-slate-400 font-normal">({item.reviews || 95} ulasan)</span>
-                  </div>
-
-                  <span className="text-slate-500 font-semibold text-[11px]">
-                    {item.downloadCount} kali diunduh
-                  </span>
-                </div>
-
                 {/* Brief description */}
                 <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed font-medium">
                   {item.description}
                 </p>
 
-                {/* File Specs Pill */}
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px] text-slate-600">
+                {/* File Format Pill */}
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center text-[11px] text-slate-600">
                   <span className="font-bold text-slate-700">{item.format}</span>
-                  <span>Ukuran: {item.fileSize}</span>
                 </div>
 
               </div>
 
               {/* Action Buttons Footer */}
-              <div className="p-5 pt-3 border-t border-slate-100 bg-slate-50/50 flex items-center gap-2">
-                <button
-                  onClick={() => setActiveModalItem(item)}
-                  className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold border border-slate-200 transition-all flex items-center justify-center gap-1.5 shadow-soft-sm"
-                >
-                  <Eye className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Detail & Kisi-Kisi</span>
-                </button>
-
+              <div className="p-5 pt-3 border-t border-slate-100 bg-slate-50/50">
                 <button
                   onClick={() => handleDownload(item)}
-                  className="flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-soft hover:shadow-glow-gold"
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-soft hover:shadow-glow-gold hover:scale-[1.01] active:scale-[0.99]"
                 >
-                  <Download className="w-3.5 h-3.5 text-gold-400" />
+                  <Download className="w-4 h-4 text-gold-400" />
                   <span>Unduh Gratis</span>
                 </button>
               </div>
