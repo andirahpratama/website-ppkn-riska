@@ -26,7 +26,6 @@ import {
   getStoredDigitalProducts 
 } from '../data/ppknData';
 import { isAdminAuthenticated } from '../lib/adminAuth';
-import AvatarAdjustModal from '../components/AvatarAdjustModal';
 
 // Clean SVG components for brand channels
 const InstagramIcon = ({ className }) => (
@@ -57,8 +56,6 @@ const WhatsappIcon = ({ className }) => (
 
 export default function HomePage() {
   const [teacher, setTeacher] = useState(() => getStoredProfile());
-  const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
-  const isAdmin = isAdminAuthenticated();
   const pageSettings = getStoredPageSettings();
   const contact = pageSettings.contact || {};
   const articles = getStoredArticles().slice(0, 3);
@@ -70,18 +67,6 @@ export default function HomePage() {
     window.addEventListener('teacher-profile-updated', handleProfileUpdate);
     return () => window.removeEventListener('teacher-profile-updated', handleProfileUpdate);
   }, []);
-
-  const handleSaveCroppedAvatar = (croppedBase64) => {
-    const updated = {
-      ...teacher,
-      avatarUrl: croppedBase64,
-      avatarZoom: 1,
-      avatarX: 0,
-      avatarY: 0
-    };
-    setTeacher(updated);
-    saveStoredProfile(updated);
-  };
 
   const waLink = contact.whatsappNumber 
     ? `https://wa.me/${contact.whatsappNumber}?text=Halo%20Bu%20Riska%20Puspita,%20saya%20tertarik%20berdiskusi%20dan%20berkolaborasi` 
@@ -108,39 +93,19 @@ export default function HomePage() {
                 <div className="absolute -inset-2 sm:-inset-3 rounded-full border-2 border-slate-900/10 pointer-events-none" />
                 
                 {/* Main Circular Avatar Frame */}
-                <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full p-2.5 bg-white shadow-2xl relative overflow-hidden flex items-center justify-center border-4 border-slate-900 group">
+                <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full shadow-2xl relative overflow-hidden flex items-center justify-center border-4 border-slate-900 bg-slate-950">
                   {teacher.avatarUrl ? (
-                    <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                      <img 
-                        src={teacher.avatarUrl} 
-                        alt={teacher.name || "Riska Puspita, S.Pd."} 
-                        className="w-full h-full object-cover select-none pointer-events-none"
-                      />
-                    </div>
+                    <img 
+                      src={teacher.avatarUrl} 
+                      alt={teacher.name || "Riska Puspita, S.Pd."} 
+                      className="w-full h-full object-cover select-none pointer-events-none"
+                    />
                   ) : (
                     <div className="w-full h-full rounded-full bg-slate-950 flex flex-col items-center justify-center text-white text-center p-4">
                       <span className="text-6xl sm:text-7xl font-black text-gold-400">RP</span>
                       <span className="text-sm font-bold tracking-wider text-slate-200 mt-2">RISKA PUSPITA</span>
                       <span className="text-xs text-slate-400">S.Pd. PPKn</span>
                     </div>
-                  )}
-
-                  {/* Corner Accent Badge */}
-                  <div className="absolute bottom-4 right-4 bg-slate-900 text-gold-400 px-3.5 py-1.5 rounded-full text-xs font-black shadow-lg border border-gold-400 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Pendidik PPKn</span>
-                  </div>
-
-                  {/* Tombol Atur Posisi Langsung (Jika Admin) */}
-                  {isAdmin && teacher.avatarUrl && (
-                    <button
-                      onClick={() => setIsAdjustModalOpen(true)}
-                      className="absolute top-4 right-4 z-20 bg-slate-900/90 hover:bg-slate-900 text-gold-400 px-3 py-1.5 rounded-full text-xs font-black shadow-xl border border-gold-400 flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
-                      title="Atur Posisi & Zoom Foto (Tarik Geser)"
-                    >
-                      <Move className="w-3.5 h-3.5" />
-                      <span>Atur Foto</span>
-                    </button>
                   )}
                 </div>
 
@@ -583,13 +548,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Modal Tarik Geser & Zoom Foto Profil */}
-      <AvatarAdjustModal
-        isOpen={isAdjustModalOpen}
-        onClose={() => setIsAdjustModalOpen(false)}
-        imageUrl={teacher.avatarUrl}
-        onSave={handleSaveCroppedAvatar}
-      />
 
     </div>
   );
