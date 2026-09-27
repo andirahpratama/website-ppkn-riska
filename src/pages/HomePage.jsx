@@ -14,8 +14,7 @@ import {
   ExternalLink,
   Heart,
   Clock,
-  Calendar,
-  Move
+  Calendar
 } from 'lucide-react';
 import { 
   getStoredPageSettings, 
@@ -25,7 +24,6 @@ import {
   getStoredBankSoalDownloads, 
   getStoredDigitalProducts 
 } from '../data/ppknData';
-import { isAdminAuthenticated } from '../lib/adminAuth';
 
 // Clean SVG components for brand channels
 const InstagramIcon = ({ className }) => (
@@ -395,15 +393,6 @@ export default function HomePage() {
                       alt="Aktivitas Pembelajaran Bu Riska" 
                       className="w-full h-full object-cover"
                     />
-                  )}
-                  {isAdmin && teacher.avatarUrl && (
-                    <button
-                      onClick={() => setIsAdjustModalOpen(true)}
-                      className="absolute top-3 right-3 bg-slate-900/80 hover:bg-slate-900 text-gold-400 px-2.5 py-1 rounded-full text-[11px] font-bold border border-gold-400/50 flex items-center gap-1 transition-all"
-                    >
-                      <Move className="w-3 h-3" />
-                      <span>Atur Posisi</span>
-                    </button>
                   )}
                 </div>
 
