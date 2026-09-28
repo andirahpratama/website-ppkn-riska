@@ -49,15 +49,36 @@ CREATE TABLE IF NOT EXISTS public.portfolio_p5 (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 5. Buat Tabel Komentar Artikel & Diskusi Siswa
+CREATE TABLE IF NOT EXISTS public.article_comments (
+    id TEXT PRIMARY KEY,
+    article_slug VARCHAR(255) NOT NULL,
+    article_title VARCHAR(255) NOT NULL,
+    author_name VARCHAR(150) NOT NULL,
+    content TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Menunggu Balasan',
+    reply_content TEXT,
+    reply_author VARCHAR(150),
+    replied_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Aktifkan Row Level Security (RLS)
 ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.leaderboard ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.consultations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_p5 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.article_comments ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Publik dapat membaca pertanyaan dan portofolio
 CREATE POLICY "Public Read Questions" ON public.questions FOR SELECT USING (true);
 CREATE POLICY "Public Read Portfolio" ON public.portfolio_p5 FOR SELECT USING (true);
+
+-- Policy: Publik dapat membaca dan menambah komentar artikel
+CREATE POLICY "Public Read Comments" ON public.article_comments FOR SELECT USING (true);
+CREATE POLICY "Public Insert Comments" ON public.article_comments FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Update Comments" ON public.article_comments FOR UPDATE USING (true);
+CREATE POLICY "Public Delete Comments" ON public.article_comments FOR DELETE USING (true);
 
 -- Policy: Publik dapat membaca dan menambah skor leaderboard
 CREATE POLICY "Public Read Leaderboard" ON public.leaderboard FOR SELECT USING (true);

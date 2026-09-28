@@ -16,7 +16,8 @@ import {
   Activity,
   ShieldCheck,
   Settings2,
-  Calendar
+  Calendar,
+  MessageCircle
 } from 'lucide-react';
 import { isConfigured } from '../../lib/supabaseClient';
 import { pingSupabase, getSupabasePingStatus } from '../../lib/supabasePing';
@@ -26,10 +27,12 @@ export default function OverviewTab({
   leaderboard, 
   consultations, 
   portfolio,
+  comments = [],
   onNavigateTab,
   onOpenSupabaseModal
 }) {
   const unreadMessagesCount = consultations.filter(c => c.status === 'Belum Dibaca').length;
+  const pendingCommentsCount = comments.filter(c => c.status === 'Menunggu Balasan' || !c.reply).length;
 
   // Supabase Ping States
   const [pingStatus, setPingStatus] = useState(() => getSupabasePingStatus());
@@ -246,6 +249,37 @@ export default function OverviewTab({
           </div>
         )}
       </div>
+
+      {/* Pending Comments Alert Banner */}
+      {pendingCommentsCount > 0 && (
+        <div 
+          onClick={() => onNavigateTab('comments')}
+          className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer hover:shadow-soft-lg hover:-translate-y-0.5 transition-all shadow-soft"
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-slate-950 text-gold-400 flex items-center justify-center shrink-0 shadow-soft">
+              <MessageCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-black text-sm sm:text-base">
+                  Ada {pendingCommentsCount} Komentar Siswa Menunggu Balasan Anda!
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-950 text-amber-300">
+                  Respon Cepat
+                </span>
+              </div>
+              <p className="text-xs text-slate-900 font-medium mt-0.5">
+                Siswa telah berpartisipasi di artikel PPKn. Klik di sini untuk melihat dan membalas komentar mereka.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 font-black text-xs bg-slate-950 text-white px-4 py-2.5 rounded-2xl shrink-0 self-start sm:self-center shadow-soft-sm">
+            <span>Balas Sekarang</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </div>
+      )}
 
       {/* 4 Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

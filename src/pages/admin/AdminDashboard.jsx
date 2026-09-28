@@ -21,7 +21,10 @@ import {
   getStoredDigitalProducts,
   saveStoredDigitalProducts,
   getStoredPageSettings,
-  saveStoredPageSettings
+  saveStoredPageSettings,
+  getStoredArticleComments,
+  saveStoredArticleComments,
+  syncArticleCommentsFromSupabase
 } from '../../data/ppknData';
 
 // Tabs
@@ -33,6 +36,7 @@ import ProfileManagerTab from '../../components/admin/ProfileManagerTab';
 import PortfolioManagerTab from '../../components/admin/PortfolioManagerTab';
 import InquiriesManagerTab from '../../components/admin/InquiriesManagerTab';
 import ArticlesManagerTab from '../../components/admin/ArticlesManagerTab';
+import CommentsManagerTab from '../../components/admin/CommentsManagerTab';
 import SupabaseModal from '../../components/SupabaseModal';
 import { isConfigured } from '../../lib/supabaseClient';
 
@@ -45,6 +49,7 @@ import {
   Award, 
   MessageSquare, 
   FileText,
+  MessageCircle,
   LogOut, 
   ExternalLink, 
   Menu, 
@@ -67,6 +72,7 @@ export default function AdminDashboard() {
   const [portfolio, setPortfolio] = useState(() => getStoredPortfolio());
   const [consultations, setConsultations] = useState(() => getStoredConsultations());
   const [pageSettings, setPageSettings] = useState(() => getStoredPageSettings());
+  const [comments, setComments] = useState(() => getStoredArticleComments());
 
   // Protect Route
   useEffect(() => {
@@ -74,6 +80,20 @@ export default function AdminDashboard() {
       navigate('/admin/login', { replace: true });
     }
   }, [navigate]);
+
+  // Sync Supabase comments on mount & listen to changes
+  useEffect(() => {
+    syncArticleCommentsFromSupabase().then(res => {
+      if (Array.isArray(res)) setComments(res);
+    });
+
+    const handleCommentsUpdated = (e) => {
+      if (e.detail) setComments(e.detail);
+      else setComments(getStoredArticleComments());
+    };
+    window.addEventListener('article-comments-updated', handleCommentsUpdated);
+    return () => window.removeEventListener('article-comments-updated', handleCommentsUpdated);
+  }, []);
 
   const handleLogout = () => {
     if (window.confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
@@ -117,10 +137,22 @@ export default function AdminDashboard() {
     saveStoredPageSettings(newSettings);
   };
 
+  const updateComments = (newComments) => {
+    setComments(newComments);
+    saveStoredArticleComments(newComments);
+  };
+
   const navItems = [
     { id: 'overview', label: 'Dashboard Utama', icon: LayoutDashboard },
     { id: 'page_settings', label: 'Pengaturan Halaman', icon: Settings },
     { id: 'articles', label: 'Artikel & SEO AI', icon: FileText },
+    { 
+      id: 'comments', 
+      label: 'Komentar Artikel', 
+      icon: MessageCircle, 
+      count: comments.filter(c => c.status === 'Menunggu Balasan' || !c.reply).length,
+      badgeColor: 'bg-amber-500 text-white'
+    },
     { id: 'bank_soal_downloads', label: 'Katalog Bank Soal (Gratis)', icon: BookOpen, count: downloadItems.length },
     { id: 'digital_products', label: 'Produk Digital Marketplace', icon: ShoppingBag, count: digitalProducts.length },
     { id: 'profile', label: 'Profil & Timeline Guru', icon: User },
@@ -326,6 +358,7 @@ export default function AdminDashboard() {
               leaderboard={digitalProducts}
               consultations={consultations}
               portfolio={portfolio}
+              comments={comments}
               onNavigateTab={(tabId) => setActiveTab(tabId)}
               onOpenSupabaseModal={() => setSupabaseModalOpen(true)}
             />
@@ -339,6 +372,13 @@ export default function AdminDashboard() {
 
           {activeTab === 'articles' && (
             <ArticlesManagerTab />
+          )}
+
+          {activeTab === 'comments' && (
+            <CommentsManagerTab
+              comments={comments}
+              onUpdateComments={updateComments}
+            />
           )}
 
           {activeTab === 'bank_soal_downloads' && (

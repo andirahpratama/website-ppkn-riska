@@ -17,6 +17,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { getStoredArticles, getStoredProfile, getStoredPageSettings } from '../data/ppknData';
+import ArticleCommentsSection from '../components/ArticleCommentsSection';
 
 // Markdown simple parser helper untuk render semantic HTML
 function renderMarkdownContent(content) {
@@ -351,9 +352,14 @@ export default function ArticleDetailPage() {
             />
           </div>
 
-          {/* AI GENERATIVE ENGINE OPTIMIZATION (GEO) HIGHLIGHT BOX */}
+          {/* Article Main Markdown Content */}
+          <section className="prose prose-slate max-w-none pt-2">
+            {renderMarkdownContent(article.content)}
+          </section>
+
+          {/* AI GENERATIVE ENGINE OPTIMIZATION (GEO) HIGHLIGHT BOX - DILETAKKAN DI AKHIR ARTIKEL */}
           {keyTakeaways.length > 0 && (
-            <section className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white border border-slate-700 shadow-soft space-y-4">
+            <section className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white border border-slate-700 shadow-soft space-y-4 my-6">
               <div className="flex items-center justify-between pb-3 border-b border-slate-700/80">
                 <div className="flex items-center gap-2">
                   <Bot className="w-4 h-4 text-gold-400" />
@@ -383,11 +389,6 @@ export default function ArticleDetailPage() {
               )}
             </section>
           )}
-
-          {/* Article Main Markdown Content */}
-          <section className="prose prose-slate max-w-none pt-2">
-            {renderMarkdownContent(article.content)}
-          </section>
 
           {/* Article Footer & SEO Tags */}
           <footer className="pt-6 border-t border-slate-100 space-y-6">
@@ -449,6 +450,13 @@ export default function ArticleDetailPage() {
             </div>
 
           </footer>
+
+          {/* KOLOM KOMENTAR & DISKUSI ARTIKEL PUBLIK */}
+          <ArticleCommentsSection
+            articleSlug={article.slug || slug}
+            articleTitle={article.title}
+            teacherName={teacher.name}
+          />
 
         </article>
 

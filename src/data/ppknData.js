@@ -1,7 +1,4 @@
-/**
- * Data Resmi & Otentik Ruang PPKn Interaktif - Riska Puspita, S.Pd.
- * Didesain khusus untuk kurikulum Pendidikan Pancasila SMP (Fase D / Kelas 7, 8, 9).
- */
+import { supabase, isConfigured } from '../lib/supabaseClient';
 
 export const teacherProfile = {
   name: "Riska Puspita, S.Pd.",
@@ -1035,6 +1032,206 @@ export function saveStoredArticles(articles) {
     localStorage.setItem('admin_custom_articles', JSON.stringify(articles));
   }
 }
+
+// ==============================================================================
+// SISTEM KOMENTAR ARTIKEL PUBLIK & BALASAN ADMIN
+// ==============================================================================
+
+export const defaultArticleComments = [
+  {
+    id: "comm-1",
+    articleSlug: "membumikan-pancasila-di-era-digital-panduan-etika-berinternet-siswa-smp",
+    articleTitle: "Membumikan Pancasila di Era Digital: Panduan Etika Berinternet Siswa SMP",
+    authorName: "Farhan Maulana (Siswa Kelas 8B)",
+    content: "Penjelasan mengenai pengamalan Sila ke-2 di media sosial sangat mengena Bu. Terkadang di grup chat kelas suka ada yang saling ledek berlebihan sampai menyinggung perasaan, sekarang saya jadi lebih paham pentingnya kesantunan siber.",
+    status: "Dibalas",
+    createdAt: new Date(Date.now() - 3600000 * 28).toISOString(),
+    reply: {
+      author: "Riska Puspita, S.Pd.",
+      authorRole: "Pendidik PPKn SMP",
+      content: "Terima kasih Farhan! Hebat sekali refleksinya. Menjaga ketikan dan saling menghormati di grup kelas adalah bukti nyata Pelajar Pancasila sejati. Terus tularkan teladan baik ini ke teman-teman ya!",
+      repliedAt: new Date(Date.now() - 3600000 * 20).toISOString()
+    }
+  },
+  {
+    id: "comm-2",
+    articleSlug: "menghidupkan-semangat-gotong-royong-lewat-proyek-p5-di-sekolah",
+    articleTitle: "Menghidupkan Semangat Gotong Royong Lewat Proyek P5 di Sekolah",
+    authorName: "Nayla Putri Kirana (Siswa Kelas 7A)",
+    content: "Bu Riska, untuk gelar karya proyek P5 bertema Bhinneka Tunggal Ika nanti, apakah kelompok kami diperbolehkan membuat video dokumenter wawancara kerukunan antarumat beragama di lingkungan sekitar sekolah?",
+    status: "Menunggu Balasan",
+    createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+    reply: null
+  },
+  {
+    id: "comm-3",
+    articleSlug: "membumikan-pancasila-di-era-digital-panduan-etika-berinternet-siswa-smp",
+    articleTitle: "Membumikan Pancasila di Era Digital: Panduan Etika Berinternet Siswa SMP",
+    authorName: "Pak Hendra (Guru PPKn SMP)",
+    content: "Materi dan infografisnya sangat terstruktur dan aplikatif untuk anak didik zaman sekarang Bu Riska. Izin saya jadikan referensi diskusi di kelas kami ya.",
+    status: "Dibalas",
+    createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
+    reply: {
+      author: "Riska Puspita, S.Pd.",
+      authorRole: "Pendidik PPKn SMP",
+      content: "Dengan senang hati Pak Hendra, silakan digunakan seluas-luasnya untuk kebaikan pembelajaran peserta didik kita bersama. Salam hangat sesama pengabdi pendidikan!",
+      repliedAt: new Date(Date.now() - 3600000 * 44).toISOString()
+    }
+  }
+];
+
+export function getStoredArticleComments() {
+  if (typeof window === 'undefined') return defaultArticleComments;
+  const raw = localStorage.getItem('admin_article_comments');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch {
+      // fallback
+    }
+  }
+  return defaultArticleComments;
+}
+
+export function saveStoredArticleComments(comments) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('admin_article_comments', JSON.stringify(comments));
+    window.dispatchEvent(new CustomEvent('article-comments-updated', { detail: comments }));
+  }
+}
+
+export async function addArticleComment({ articleSlug, articleTitle, authorName, content }) {
+  const newComment = {
+    id: `comm-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    articleSlug,
+    articleTitle: articleTitle || 'Artikel PPKn',
+    authorName: authorName.trim(),
+    content: content.trim(),
+    status: "Menunggu Balasan",
+    createdAt: new Date().toISOString(),
+    reply: null
+  };
+
+  const current = getStoredArticleComments();
+  const updated = [newComment, ...current];
+  saveStoredArticleComments(updated);
+
+  // Sync dengan Supabase jika terkonfigurasi
+  try {
+    if (isConfigured && supabase) {
+      await supabase.from('article_comments').insert([{
+        id: newComment.id,
+        article_slug: newComment.articleSlug,
+        article_title: newComment.articleTitle,
+        author_name: newComment.authorName,
+        content: newComment.content,
+        status: newComment.status,
+        created_at: newComment.createdAt
+      }]);
+    }
+  } catch (err) {
+    console.warn('[Comments] Supabase insert fallback to local:', err);
+  }
+
+  return newComment;
+}
+
+export async function replyArticleComment(commentId, replyContent, replyAuthor = "Riska Puspita, S.Pd.") {
+  const current = getStoredArticleComments();
+  const now = new Date().toISOString();
+  
+  const updated = current.map(comm => {
+    if (comm.id === commentId) {
+      return {
+        ...comm,
+        status: 'Dibalas',
+        reply: {
+          author: replyAuthor,
+          authorRole: "Pendidik PPKn SMP",
+          content: replyContent.trim(),
+          repliedAt: now
+        }
+      };
+    }
+    return comm;
+  });
+
+  saveStoredArticleComments(updated);
+
+  // Sync dengan Supabase jika terkonfigurasi
+  try {
+    if (isConfigured && supabase) {
+      await supabase.from('article_comments').update({
+        status: 'Dibalas',
+        reply_content: replyContent.trim(),
+        reply_author: replyAuthor,
+        replied_at: now
+      }).eq('id', commentId);
+    }
+  } catch (err) {
+    console.warn('[Comments] Supabase reply update fallback to local:', err);
+  }
+
+  return updated;
+}
+
+export async function deleteArticleComment(commentId) {
+  const current = getStoredArticleComments();
+  const updated = current.filter(comm => comm.id !== commentId);
+  saveStoredArticleComments(updated);
+
+  try {
+    if (isConfigured && supabase) {
+      await supabase.from('article_comments').delete().eq('id', commentId);
+    }
+  } catch (err) {
+    console.warn('[Comments] Supabase delete fallback to local:', err);
+  }
+
+  return updated;
+}
+
+export async function syncArticleCommentsFromSupabase() {
+  if (!isConfigured || !supabase) return getStoredArticleComments();
+  try {
+    const { data, error } = await supabase
+      .from('article_comments')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && Array.isArray(data) && data.length > 0) {
+      const formatted = data.map(item => ({
+        id: item.id,
+        articleSlug: item.article_slug,
+        articleTitle: item.article_title,
+        authorName: item.author_name,
+        content: item.content,
+        status: item.status || (item.reply_content ? 'Dibalas' : 'Menunggu Balasan'),
+        createdAt: item.created_at,
+        reply: item.reply_content ? {
+          author: item.reply_author || "Riska Puspita, S.Pd.",
+          authorRole: "Pendidik PPKn SMP",
+          content: item.reply_content,
+          repliedAt: item.replied_at || item.created_at
+        } : null
+      }));
+
+      // Merge dengan data lokal tanpa duplikasi id
+      const local = getStoredArticleComments();
+      const map = new Map();
+      local.forEach(l => map.set(l.id, l));
+      formatted.forEach(f => map.set(f.id, f));
+      const merged = Array.from(map.values()).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+      saveStoredArticleComments(merged);
+      return merged;
+    }
+  } catch {
+    // fallback gracefully
+  }
+  return getStoredArticleComments();
+}
+
 
 
 
